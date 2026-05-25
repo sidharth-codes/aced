@@ -13,7 +13,7 @@ body {
   top: 50%;
   left: 50%;  
   transform: translate(-50%, -50%);
-  transition: all 0.5s ease-in;
+  transition: all 0.5s ease-in;/* Add transition for smooth animation */
 }
 .logo{
   width: 250px;
@@ -22,5 +22,5 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  transition: all 0.5s ease-in;
+  transition: all 0.5s ease-in;/* Add transition for smooth animation */
 }
