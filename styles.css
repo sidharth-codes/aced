@@ -99,17 +99,28 @@ body {
   transition: color 0.3s ease, transform 0.2s ease;
   z-index: 1; /* Sits above the sliding indicator pill */
 }
-
-/* Button Hover State: Slight rise lift effect */
-.nav-btn:hover {
+/* While hovering the navbar, make the active button text dark so it's readable when indicator moves away */
+.navbar:hover .nav-btn.active {
   color: #1c1c1c;
+}
+
+/* If hovering the active button itself, keep it white */
+.navbar:hover .nav-btn.active:hover {
+  color: #ffffff;
+}
+
+/* Button Hover State: Slight rise lift effect and turn text white for the dark indicator pill */
+.nav-btn:hover {
+  color: #ffffff;
   transform: translateY(-2px);
 }
 
-/* Active Button State: Highlighted color and subtle scale expansion */
+/* Active Button State: Highlighted color, scale expansion, and clean text underline */
 .nav-btn.active {
   color: #ffffff;
   transform: translateY(-2px) scale(1.05);
+  text-decoration: underline;
+  text-underline-offset: 4px; /* Leaves a clean spacing below text */
 }
 
 /* Main Content Wrapper Card: Houses all SPA page divs */
