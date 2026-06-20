@@ -168,48 +168,65 @@ body {
 /* Responsive Media Queries for Mobile/Tablet Screens */
 @media (max-width: 768px) {
   body {
-    overflow: auto; /* Enable page scrolling on mobile if contents grow */
+    overflow: hidden; /* Keep overflow hidden so it acts like a true app */
   }
-  /* Flex wrap navbar below the scaled down logo */
+  
+  /* Reposition header side-by-side with logo on mobile */
   .app-header {
-    position: static;
-    margin-top: 140px;
-    padding: 0 20px;
-    height: auto;
-    justify-content: center;
+    position: absolute;
+    top: 15px;
+    left: 75px; /* Clear space for the 50px logo + 10px margin */
+    right: 15px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    z-index: 50;
   }
+
+  /* Make navbar horizontally scrollable to prevent wrapping on narrow screens */
   .navbar {
     width: 100%;
-    flex-wrap: wrap;
-    justify-content: center;
+    overflow-x: auto;
+    display: flex;
     gap: 8px;
+    padding: 4px 0;
+    scrollbar-width: none; /* Hide standard scrollbar for clean UI on Firefox */
   }
+
+  .navbar::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Safari/Chrome */
+  }
+
   .nav-btn {
-    padding: 8px 14px;
+    padding: 6px 14px;
     font-size: 13px;
-    flex-grow: 1;
-    text-align: center;
+    white-space: nowrap; /* Prevent button text wrapping */
   }
-  /* Readjust content container sizing */
+
+  /* Adjust content container to sit below header/logo and fill viewport */
   .content-container {
-    position: static;
-    margin: 20px;
+    position: absolute;
+    top: 80px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
     padding: 20px;
-    height: auto;
-    overflow-y: visible;
+    border-radius: 12px;
   }
+
   /* Clamp logo box offset in mobile top left view only after it is shrunk */
   .logo_box.shrunk {
-    left: 30px !important;
-    top: 30px !important;
-    width: 60px !important;
-    height: 60px !important;
-    transform: none !important;
+    left: 40px !important;
+    top: 40px !important;
+    width: 50px !important;
+    height: 50px !important;
+    transform: translate(-50%, -50%) !important;
   }
+
   .logo_box.shrunk .logo {
-    width: 60px !important;
-    height: 60px !important;
-    transform: none !important;
+    width: 50px !important;
+    height: 50px !important;
   }
 }
 
