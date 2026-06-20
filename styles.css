@@ -1,11 +1,18 @@
+/* Main Viewport & Reset Styling */
 body {
-  background-color: #E0E1DD;
+  background-color: #E0E1DD; /* Platinum background */
   width: 100vw;
   height: 100vh;
   position: relative;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevent scrolling during initial logo animation */
 }
+
+/* Original Logo Circle Container: Centered on screen, shrinks and moves to top-left on click */
 .logo_box {
-  background-color: #D9D9D9;
+  background-color: #D9D9D9; /* Light grey base circle */
   width: 250px;
   height: 250px;
   border-radius: 100%;
@@ -13,14 +20,196 @@ body {
   top: 50%;
   left: 50%;  
   transform: translate(-50%, -50%);
-  transition: all 0.5s ease-in;/* Add transition for smooth animation */
+  transition: all 0.5s ease-in; /* Handles smooth motion during shrink & move */
+  z-index: 100; /* Stays above SPA content container */
 }
-.logo{
+
+/* Logo Image Container */
+.logo {
   width: 250px;
   height: 250px;
   position: relative;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  transition: all 0.5s ease-in;/* Add transition for smooth animation */
+  transition: all 0.5s ease-in; /* Keeps image size locked with its wrapper */
 }
+
+/* SPA Wrapper: Starts invisible, fades in when the wrapper is active */
+.app-wrapper {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease-in-out;
+  width: 100%;
+  height: 100%;
+}
+
+/* Revealed App Wrapper State */
+.app-wrapper.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Top Navigation Bar Header Container */
+.app-header {
+  position: absolute;
+  top: 37.5px;
+  right: 50px;
+  height: 75px;
+  display: flex;
+  align-items: center;
+  z-index: 50;
+}
+
+/* Navigation List Wrapper */
+.navbar {
+  display: flex;
+  gap: 12px;
+  position: relative;
+}
+
+/* Sliding Indicator Background Pill */
+.nav-indicator {
+  position: absolute;
+  background-color: #333333; /* Dark pill background */
+  border-radius: 20px;
+  transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1); /* Custom transition for smooth sliding */
+  z-index: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  pointer-events: none; /* Allows cursor hover triggers to go straight to buttons */
+  opacity: 0; /* Stays hidden until first layout computation */
+}
+
+/* Reveal Sliding Indicator on Visible App */
+.app-wrapper.visible .nav-indicator {
+  opacity: 1;
+}
+
+/* Navigation Menu Button styling */
+.nav-btn {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 20px;
+  cursor: pointer;
+  position: relative;
+  color: #4a4a4a;
+  transition: color 0.3s ease, transform 0.2s ease;
+  z-index: 1; /* Sits above the sliding indicator pill */
+}
+
+/* Button Hover State: Slight rise lift effect */
+.nav-btn:hover {
+  color: #1c1c1c;
+  transform: translateY(-2px);
+}
+
+/* Active Button State: Highlighted color and subtle scale expansion */
+.nav-btn.active {
+  color: #ffffff;
+  transform: translateY(-2px) scale(1.05);
+}
+
+/* Main Content Wrapper Card: Houses all SPA page divs */
+.content-container {
+  position: absolute;
+  top: 130px;
+  left: 50px;
+  right: 50px;
+  bottom: 50px;
+  background-color: #D9D9D9; /* Matches logo box background */
+  border-radius: 16px;
+  padding: 40px;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* Page Section Base: Hidden by default */
+.page-section {
+  display: none;
+  color: #1c1c1c;
+}
+
+/* Active Page State: Revealed with fadeInUp motion */
+.page-section.active {
+  display: block;
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+/* Smooth active page slide-up fade-in transition */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Page Title styling */
+.page-title {
+  font-size: 28px;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+/* Page Description Description */
+.page-desc {
+  font-size: 16px;
+  margin-bottom: 30px;
+  color: #4a4a4a;
+  line-height: 1.5;
+}
+
+/* Responsive Media Queries for Mobile/Tablet Screens */
+@media (max-width: 768px) {
+  body {
+    overflow: auto; /* Enable page scrolling on mobile if contents grow */
+  }
+  /* Flex wrap navbar below the scaled down logo */
+  .app-header {
+    position: static;
+    margin-top: 140px;
+    padding: 0 20px;
+    height: auto;
+    justify-content: center;
+  }
+  .navbar {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  .nav-btn {
+    padding: 8px 14px;
+    font-size: 13px;
+    flex-grow: 1;
+    text-align: center;
+  }
+  /* Readjust content container sizing */
+  .content-container {
+    position: static;
+    margin: 20px;
+    padding: 20px;
+    height: auto;
+    overflow-y: visible;
+  }
+  /* Clamp logo box offset in mobile top left view only after it is shrunk */
+  .logo_box.shrunk {
+    left: 30px !important;
+    top: 30px !important;
+    width: 60px !important;
+    height: 60px !important;
+    transform: none !important;
+  }
+  .logo_box.shrunk .logo {
+    width: 60px !important;
+    height: 60px !important;
+    transform: none !important;
+  }
+}
+
