@@ -3,15 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Stylesheets & Main Script Configuration -->
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
   <title>ACED</title>
 </head>
 <body>
-  <!--logo box-->
+  <!-- Brand Logo Container: Starts centered and moves/shrinks to the top-left on any document click -->
   <div class="logo_box" id="logo_box">
     <img src="logo bg removed.png" alt="Logo" id="logo" class="logo">
   </div>
-  
+
+  <!-- Main App Wrapper: Starts hidden (opacity: 0) and fades in after the first logo transition -->
+  <div id="app_wrapper" class="app-wrapper">
+    
+    <!-- Header Navigation: Placed on the top-right of the viewport -->
+    <header class="app-header">
+      <nav class="navbar" id="navbar">
+        <!-- Sliding Indicator Pill: Dynamically tracks and slides behind active and hovered tabs using JS -->
+        <div class="nav-indicator" id="nav_indicator"></div>
+        
+        <!-- Navigation Buttons: data-page matches the target division ID to reveal -->
+        <button class="nav-btn active" data-page="home">Home</button>
+        <button class="nav-btn" data-page="event">Event</button>
+        <button class="nav-btn" data-page="news">News</button>
+        <button class="nav-btn" data-page="about">About</button>
+        <button class="nav-btn" data-page="contacts">Contacts</button>
+      </nav>
+    </header>
+
+    <!-- Page Content Container: Holds individual page segments styled as custom cards -->
+    <main class="content-container">
+      
+      <!-- Home Page Segment (Visible by default) -->
+      <div id="home" class="page-section active">
+        <h1 class="page-title">Home</h1>
+        <p class="page-desc">This is Home page</p>
+      </div>
+
+      <!-- Event Page Segment -->
+      <div id="event" class="page-section">
+        <h1 class="page-title">Event</h1>
+        <p class="page-desc">This is Event page</p>
+      </div>
+
+      <!-- News Page Segment -->
+      <div id="news" class="page-section">
+        <h1 class="page-title">News</h1>
+        <p class="page-desc">This is News page</p>
+      </div>
+
+      <!-- About Page Segment -->
+      <div id="about" class="page-section">
+        <h1 class="page-title">About</h1>
+        <p class="page-desc">This is About page</p>
+      </div>
+
+      <!-- Contacts Page Segment -->
+      <div id="contacts" class="page-section">
+        <h1 class="page-title">Contacts</h1>
+        <p class="page-desc">This is Contacts page</p>
+      </div>
+    </main>
+  </div>
 </body>
 </html>
