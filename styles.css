@@ -8,6 +8,9 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden; /* Prevent scrolling during initial logo animation */
+  font-family: "Anta", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 /* Original Logo Circle Container: Centered on screen, shrinks and moves to top-left on click */
@@ -132,7 +135,7 @@ body {
   bottom: 0;
   background-color: #D9D9D9; /* Matches logo box background */
   border-radius: 24px 24px 0 0; /* Rounded top corners only */
-  padding: 40px;
+  padding: 0px !important;
   overflow-y: auto;
   scrollbar-width: none; /* Hide scrollbar for Firefox */
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.03); /* Soft shadow on the top edge */
@@ -147,6 +150,7 @@ body {
 .page-section {
   display: none;
   color: #1c1c1c;
+  padding: 30px 40px;
 }
 
 /* Active Page State: Revealed with fadeInUp motion */
@@ -545,30 +549,86 @@ body {
     height: 50px !important;
   }
 
-  /* Home page carousel adjustments for mobile */
-  .home-hero {
-    padding: 22px;
-  }
 
-  .home-hero .hero-heading {
-    font-size: 24px;
-  }
-
-  .card {
-    flex: 0 0 250px;
-  }
-
-  .announce-card {
-    flex: 0 0 280px;
-    padding: 18px;
-  }
-
-  .mission-vision .mv-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .photo-card {
-    flex: 0 0 220px;
-    height: 160px;
-  }
+.about-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
+
+.para-container {
+    width: 90%;
+    margin-top: 40px;
+}
+
+.para-container .para {
+    text-align: center;
+    font-size: large;
+    margin: 5px 0px;
+}
+
+.gallery-container {
+    width: 85%;
+    margin-top: 40px;
+    background-color: #E4DAC1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 50px;
+
+}
+
+.gallery-container .gallery {
+    width: 90%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.gallery-container .gallery img {
+    width: clamp(150px, 25%, 300px);
+
+}
+
+@media (max-width:700px) {
+    .gallery-container {
+        width: 80%;
+        padding: 40px 40px;
+    }
+
+    .gallery-container .gallery {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .gallery-container .gallery img {
+        width: clamp(200px, 25%, 300px);
+
+    }
+}
+
+@media (max-width:500px){
+    .about-container .heading{
+        font-size: x-large;
+    }
+    .about-container .sub-heading{
+        font-size: large;
+    }
+    .para-container {
+        margin-top: 15px;
+    }
+    .para-container .para {
+        font-size: medium;
+        margin: 10px 0px;
+    }
+    .gallery-container{
+        width: 70%;
+        padding: 40px 30px;
+    }
+    .gallery-container .gallery img {
+        width: 150px;
+    }
+} 
+
