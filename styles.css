@@ -186,6 +186,305 @@ body {
   line-height: 1.5;
 }
 
+/* Home page title: centered, sits above the hero strip */
+.home-title {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* ============================================= */
+/* HOME PAGE: Hero strip + carousel sections      */
+/* Uses the same palette as the rest of the app:  */
+/* #E0E1DD platinum / #D9D9D9 grey / #333333 dark /*/
+/* #1c1c1c text / #4a4a4a muted text              */
+/* ============================================= */
+
+.home-hero {
+  background-color: #E0E1DD;
+  border-radius: 18px;
+  padding: 32px;
+  margin-bottom: 36px;
+}
+
+.home-hero .eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #4a4a4a;
+  margin-bottom: 10px;
+}
+
+.home-hero .hero-heading {
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.15;
+  color: #1c1c1c;
+  margin: 0 0 14px 0;
+}
+
+.home-hero .hero-sub {
+  font-size: 15px;
+  color: #4a4a4a;
+  line-height: 1.5;
+  max-width: 520px;
+  margin: 0;
+}
+
+/* Mission & Vision: two-column cards directly under the hero */
+.mission-vision .mv-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.mv-card {
+  background-color: #E0E1DD;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.mv-card .block-tag {
+  margin-bottom: 10px;
+}
+
+.mv-text {
+  font-size: 14.5px;
+  color: #1c1c1c;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Carousel section shell */
+.home-block {
+  margin-bottom: 44px;
+}
+
+.home-block .block-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.home-block .block-tag {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #4a4a4a;
+  margin-bottom: 4px;
+}
+
+.home-block .block-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1c1c1c;
+  margin: 0;
+}
+
+/* Carousel arrows: same dark pill language as nav-indicator */
+.arrow-group {
+  display: flex;
+  gap: 8px;
+}
+
+.arrow-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid #1c1c1c;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.arrow-btn:hover {
+  background-color: #333333;
+  border-color: #333333;
+  transform: translateY(-2px);
+}
+
+.arrow-btn svg {
+  width: 15px;
+  height: 15px;
+  stroke: #1c1c1c;
+  transition: stroke 0.25s ease;
+}
+
+.arrow-btn:hover svg {
+  stroke: #ffffff;
+}
+
+/* Carousel track */
+.carousel-viewport {
+  overflow: hidden;
+  width: 100%;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 18px;
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Event & highlight cards */
+.card {
+  flex: 0 0 300px;
+  background-color: #E0E1DD;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-media {
+  height: 140px;
+  background-color: #1c1c1c;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 14px;
+}
+
+.card-media .tag {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background-color: #333333;
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+
+.card-body {
+  padding: 18px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-date {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #4a4a4a;
+}
+
+.card-body h4 {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1c1c1c;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.card-body p {
+  font-size: 13.5px;
+  color: #4a4a4a;
+  line-height: 1.5;
+  flex: 1;
+  margin: 0;
+}
+
+.card-link {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1c1c1c;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-link svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* Highlight card variant */
+.highlight-card .card-media {
+  height: 170px;
+  background: linear-gradient(135deg, #1c1c1c, #333333);
+}
+
+.highlight-card .card-media .num {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  font-size: 32px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.16);
+}
+
+/* Announcement cards */
+.announce-card {
+  flex: 0 0 360px;
+  background-color: #E0E1DD;
+  border-radius: 16px;
+  padding: 22px;
+  display: flex;
+  gap: 16px;
+}
+
+.announce-icon {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 10px;
+  background-color: #1c1c1c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.announce-icon svg {
+  width: 19px;
+  height: 19px;
+  stroke: #ffffff;
+}
+
+.announce-body h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1c1c1c;
+  margin: 0 0 6px 0;
+}
+
+.announce-body p {
+  font-size: 13px;
+  color: #4a4a4a;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.announce-body .card-date {
+  display: block;
+  margin-top: 8px;
+}
+
+/* Photo carousel cards */
+.photo-card {
+  flex: 0 0 280px;
+  height: 200px;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #1c1c1c; /* Shows as a dark placeholder until an image src is set */
+}
+
+.photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 /* Responsive Media Queries for Mobile/Tablet Screens */
 @media (max-width: 768px) {
   body {
@@ -249,7 +548,6 @@ body {
     width: 50px !important;
     height: 50px !important;
   }
-}
 
 
 .about-container {
