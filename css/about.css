@@ -1,0 +1,56 @@
+
+/*scrollbar Chrome, Edge, Opera, Brave*/
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: none;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #A2A4A6;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #7d7f81;
+}
+
+.about-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.para-container{
+    width: 90%;
+    margin-top: 40px;
+}
+.para-container .para{
+    text-align: center;
+    font-size: large;
+    margin: 5px 0px;
+}
+.gallery-container{
+    width: 95%;
+    margin-top: 40px;
+    background-color: #E4DAC1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 50px;
+    
+}
+.gallery-container .gallery{
+    width: 90%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.gallery-container .gallery img{
+    width: 300px;
+
+}
+
