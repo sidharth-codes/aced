@@ -1,11 +1,4 @@
-body {
-    background-color: #E0E1DD;
-    /* Platinum background */
-    margin: 0;
-    padding: 0;
-    font-family: "Anta", sans-serif;
-    font-style: normal;
-}
+
 
 .about-container {
     display: flex;
