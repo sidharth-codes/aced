@@ -150,6 +150,7 @@ body {
 .page-section {
   display: none;
   color: #1c1c1c;
+  padding: 30px 40px;
 }
 
 /* Active Page State: Revealed with fadeInUp motion */
