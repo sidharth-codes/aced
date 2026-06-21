@@ -40,7 +40,107 @@
         <!-- Home Page Segment (Visible by default) -->
         <div id="home" class="page-section active">
           <h1 class="page-title">Home</h1>
-          <p class="page-desc">This is Home page</p>
+
+          <!-- Hero strip -->
+        <section class="home-hero">
+          <div class="eyebrow">Welcome</div>
+          <h2 class="hero-heading">Building the systems<br>behind tomorrow.</h2>
+          <p class="hero-sub">ACED brings together engineers and designers to ship real projects, run competitive events, and grow a community built on craft.</p>
+        </section>
+
+          <!-- Mission & Vision -->
+        <section class="home-block mission-vision">
+          <div class="mv-grid">
+            <div class="mv-card">
+              <div class="block-tag">Mission</div>
+              <p class="mv-text">To equip students with practical computing skills through hands-on projects, peer mentorship, and exposure to real engineering and design problems.</p>
+            </div>
+            <div class="mv-card">
+              <div class="block-tag">Vision</div>
+              <p class="mv-text">To build a department community where every student leaves with the confidence and craft to design, build, and ship systems that matter.</p>
+            </div>
+          </div>
+        </section>
+
+          <!-- HIGHLIGHTS CAROUSEL -->
+        <section class="home-block" id="home_highlights">
+          <div class="block-head">
+            <div>
+              <div class="block-tag">Recognition</div>
+              <h3 class="block-title">Highlights</h3>
+            </div>
+            <div class="arrow-group">
+              <button class="arrow-btn" data-target="highlight-track" data-dir="-1" aria-label="Previous highlights">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M15 18L9 12L15 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button class="arrow-btn" data-target="highlight-track" data-dir="1" aria-label="Next highlights">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M9 18L15 12L9 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="carousel-viewport">
+            <div class="carousel-track" id="highlight-track">
+              <div class="card highlight-card">
+                <div class="card-media"><span class="num">01</span><span class="tag">Award</span></div>
+                <div class="card-body">
+                  <span class="card-date">May 2026</span>
+                  <h4>Best Student Association — College Awards</h4>
+                  <p>Recognised for the highest member engagement across all technical clubs.</p>
+                </div>
+              </div>
+              <div class="card highlight-card">
+                <div class="card-media"><span class="num">02</span><span class="tag">Win</span></div>
+                <div class="card-body">
+                  <span class="card-date">April 2026</span>
+                  <h4>ACED team places 1st at Regional CTF</h4>
+                  <p>Three-member squad took top honors in the regional security competition.</p>
+                </div>
+              </div>
+              <div class="card highlight-card">
+                <div class="card-media"><span class="num">03</span><span class="tag">Milestone</span></div>
+                <div class="card-body">
+                  <span class="card-date">March 2026</span>
+                  <h4>200+ certifications earned by members</h4>
+                  <p>Department members crossed 200 industry certifications this academic year.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PHOTO CAROUSEL -->
+        <section class="home-block" id="home_gallery">
+          <div class="block-head">
+            <div>
+              <div class="block-tag">Gallery</div>
+              <h3 class="block-title">Photo heading goes here</h3>
+            </div>
+            <div class="arrow-group">
+              <button class="arrow-btn" data-target="gallery-track" data-dir="-1" aria-label="Previous photos">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M15 18L9 12L15 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button class="arrow-btn" data-target="gallery-track" data-dir="1" aria-label="Next photos">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M9 18L15 12L9 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="carousel-viewport">
+            <div class="carousel-track" id="gallery-track">
+              <div class="photo-card">
+                <img src="" alt="" class="photo-img">
+              </div>
+              <div class="photo-card">
+                <img src="" alt="" class="photo-img">
+              </div>
+              <div class="photo-card">
+                <img src="" alt="" class="photo-img">
+              </div>
+              <div class="photo-card">
+                <img src="" alt="" class="photo-img">
+              </div>
+            </div>
+          </div>
+        </section>
         </div>
 
         <!-- Event Page Segment -->
