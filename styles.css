@@ -126,18 +126,24 @@ body {
   text-underline-offset: 4px; /* Leaves a clean spacing below text */
 }
 
-/* Main Content Wrapper Card: Houses all SPA page divs */
+/* Main Content Wrapper Card: Houses all SPA page divs (full screen width, starts from bottom, no scrollbar) */
 .content-container {
   position: absolute;
   top: 130px;
-  left: 50px;
-  right: 50px;
-  bottom: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: #D9D9D9; /* Matches logo box background */
-  border-radius: 16px;
+  border-radius: 24px 24px 0 0; /* Rounded top corners only */
   padding: 40px;
   overflow-y: auto;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.03); /* Soft shadow on the top edge */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.content-container::-webkit-scrollbar {
+  display: none;
 }
 
 /* Page Section Base: Hidden by default */
@@ -218,15 +224,15 @@ body {
     white-space: nowrap; /* Prevent button text wrapping */
   }
 
-  /* Adjust content container to sit below header/logo and fill viewport */
+  /* Adjust content container to sit below header/logo, spanning full width to the bottom */
   .content-container {
     position: absolute;
     top: 80px;
-    left: 15px;
-    right: 15px;
-    bottom: 15px;
+    left: 0;
+    right: 0;
+    bottom: 0;
     padding: 20px;
-    border-radius: 12px;
+    border-radius: 16px 16px 0 0; /* Rounded top corners only */
   }
 
   /* Clamp logo box offset in mobile top left view only after it is shrunk */
