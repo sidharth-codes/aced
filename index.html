@@ -1,91 +1,96 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Stylesheets & Main Script Configuration -->
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="css/about.css">
-  <script src="script.js" defer></script>
-  <title>ACED</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anta&display=swap" rel="stylesheet">
-</head>
-<body>
-  <!-- Brand Logo Container: Starts centered and moves/shrinks to the top-left on any document click -->
-  <div class="logo_box" id="logo_box">
-    <img src="logo bg removed.png" alt="Logo" id="logo" class="logo">
-  </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Stylesheets & Main Script Configuration -->
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="css/about.css" />
+    <script src="script.js" defer></script>
+    <title>ACED</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anta&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Brand Logo Container: Starts centered and moves/shrinks to the top-left on any document click -->
+    <div class="logo_box" id="logo_box">
+      <img src="logo bg removed.png" alt="Logo" id="logo" class="logo" />
+    </div>
 
-  <!-- Main App Wrapper: Starts hidden (opacity: 0) and fades in after the first logo transition -->
-  <div id="app_wrapper" class="app-wrapper">
-    
-    <!-- Header Navigation: Placed on the top-right of the viewport -->
-    <header class="app-header">
-      <nav class="navbar" id="navbar">
-        <!-- Sliding Indicator Pill: Dynamically tracks and slides behind active and hovered tabs using JS -->
-        <div class="nav-indicator" id="nav_indicator"></div>
-        
-        <!-- Navigation Buttons: data-page matches the target division ID to reveal -->
-        <button class="nav-btn active" data-page="home">Home</button>
-        <button class="nav-btn" data-page="event">Event</button>
-        <button class="nav-btn" data-page="news">News</button>
-        <button class="nav-btn" data-page="about">About</button>
-        <button class="nav-btn" data-page="contacts">Contacts</button>
-      </nav>
-    </header>
+    <!-- Main App Wrapper: Starts hidden (opacity: 0) and fades in after the first logo transition -->
+    <div id="app_wrapper" class="app-wrapper">
+      <!-- Header Navigation: Placed on the top-right of the viewport -->
+      <header class="app-header">
+        <nav class="navbar" id="navbar">
+          <!-- Sliding Indicator Pill: Dynamically tracks and slides behind active and hovered tabs using JS -->
+          <div class="nav-indicator" id="nav_indicator"></div>
 
-    <!-- Page Content Container: Holds individual page segments styled as custom cards -->
-    <main class="content-container">
-      
-      <!-- Home Page Segment (Visible by default) -->
-      <div id="home" class="page-section active">
-        <h1 class="page-title">Home</h1>
-        <p class="page-desc">This is Home page</p>
-      </div>
+          <!-- Navigation Buttons: data-page matches the target division ID to reveal -->
+          <button class="nav-btn active" data-page="home">Home</button>
+          <button class="nav-btn" data-page="event">Event</button>
+          <button class="nav-btn" data-page="news">News</button>
+          <button class="nav-btn" data-page="about">About</button>
+          <button class="nav-btn" data-page="contacts">Contacts</button>
+        </nav>
+      </header>
 
-      <!-- Event Page Segment -->
-      <div id="event" class="page-section">
-        <h1 class="page-title">Event</h1>
-        <p class="page-desc">This is Event page</p>
-      </div>
+      <!-- Page Content Container: Holds individual page segments styled as custom cards -->
+      <main class="content-container">
+        <!-- Home Page Segment (Visible by default) -->
+        <div id="home" class="page-section active">
+          <h1 class="page-title">Home</h1>
+          <p class="page-desc">This is Home page</p>
+        </div>
 
-      <!-- News Page Segment -->
-      <div id="news" class="page-section">
-        <h1 class="page-title">News</h1>
-        <p class="page-desc">This is News page</p>
-      </div>
+        <!-- Event Page Segment -->
+        <div id="event" class="page-section">
+          <h1 class="page-title">Event</h1>
+          <p class="page-desc">This is Event page</p>
+        </div>
 
-      <!-- About Page Segment -->
-      <div id="about" class="page-section">
-        <div class="about-container">
-          <h1 class="heading">OUR EXECUTIVE TEAM</h1>
-          <h2 class="sub-heading">The Minds Behind ACED</h2>
-          <div class="para-container">
-            <p class="para">
-              A passionate team of innovators, developers, and creators working together to build a strong technical community within the Computer Science Department.
-            </p>
-            <p class="para">
-              Through leadership, creativity, and collaboration, the ACED team organizes impactful events, workshops, and initiatives that inspire students to explore technology beyond classrooms.
-            </p>
-          </div>
-          <div class="gallery-container">
-            <div class="gallery">
-              <img src="images/photo 2.png" alt="">
-              <img src="images/photo 2.png" alt="">
-              <img src="images/photo 2.png" alt="">
+        <!-- News Page Segment -->
+        <div id="news" class="page-section">
+          <h1 class="page-title">News</h1>
+          <p class="page-desc">This is News page</p>
+        </div>
+
+        <!-- About Page Segment -->
+        <div id="about" class="page-section">
+          <div class="about-container">
+            <h1 class="heading">OUR EXECUTIVE TEAM</h1>
+            <h2 class="sub-heading">The Minds Behind ACED</h2>
+            <div class="para-container">
+              <p class="para">
+                A passionate team of innovators, developers, and creators
+                working together to build a strong technical community within
+                the Computer Science Department.
+              </p>
+              <p class="para">
+                Through leadership, creativity, and collaboration, the ACED team
+                organizes impactful events, workshops, and initiatives that
+                inspire students to explore technology beyond classrooms.
+              </p>
+            </div>
+            <div class="gallery-container">
+              <div class="gallery">
+                <img src="images/photo 2.png" alt="" />
+                <img src="images/photo 2.png" alt="" />
+                <img src="images/photo 2.png" alt="" />
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Contacts Page Segment -->
-      <div id="contacts" class="page-section">
-        <h1 class="page-title">Contacts</h1>
-        <p class="page-desc">This is Contacts page</p>
-      </div>
-    </main>
-  </div>
-</body>
+        <!-- Contacts Page Segment -->
+        <div id="contacts" class="page-section">
+          <h1 class="page-title">Contacts</h1>
+          <p class="page-desc">This is Contacts page</p>
+        </div>
+      </main>
+    </div>
+  </body>
 </html>
