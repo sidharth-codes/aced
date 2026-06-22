@@ -222,6 +222,71 @@ function restartAutoAdvance(trackId) {
   startAutoAdvance(trackId);
 }
 
+/**
+ * Adds touch scroll and mouse dragging swipe interactions to the carousel track
+ */
+function enableDragAndTouch(track) {
+  let isDragging = false;
+  let startX = 0;
+  let currentOffset = 0;
+  let dragOffset = 0;
+
+  function getClientX(e) {
+    return e.touches ? e.touches[0].clientX : e.clientX;
+  }
+
+  function dragStart(e) {
+    // Avoid interfering with link clicks unless actually dragging
+    isDragging = true;
+    startX = getClientX(e);
+    currentOffset = parseFloat(track.dataset.offset || "0");
+    track.style.transition = "none";
+    
+    if (carouselTimers[track.id]) {
+      clearInterval(carouselTimers[track.id]);
+    }
+  }
+
+  function dragMove(e) {
+    if (!isDragging) return;
+    const x = getClientX(e);
+    const deltaX = x - startX;
+    dragOffset = currentOffset + deltaX;
+    track.style.transform = `translateX(${dragOffset}px)`;
+  }
+
+  function dragEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+    track.style.transition = "";
+
+    const deltaX = dragOffset - currentOffset;
+
+    // Threshold of 50px to trigger slide transition
+    if (deltaX < -50) {
+      advanceCarousel(track, 1);
+    } else if (deltaX > 50) {
+      advanceCarousel(track, -1);
+    } else {
+      // Snap back to current slide position
+      track.style.transform = `translateX(${currentOffset}px)`;
+    }
+
+    restartAutoAdvance(track.id);
+  }
+
+  // Touch event registrations
+  track.addEventListener("touchstart", dragStart, { passive: true });
+  track.addEventListener("touchmove", dragMove, { passive: true });
+  track.addEventListener("touchend", dragEnd);
+
+  // Mouse event registrations for desktop drag fallback
+  track.addEventListener("mousedown", dragStart);
+  track.addEventListener("mousemove", dragMove);
+  track.addEventListener("mouseup", dragEnd);
+  track.addEventListener("mouseleave", dragEnd);
+}
+
 
 /* ========================================================================= */
 /* DYNAMIC MULEARN WEB SHEET INTERACTION (WEB APP WEBHOOK PARSING ENGINE)     */
@@ -270,6 +335,7 @@ async function loadDynamicSpreadsheetData() {
     // Structural layout components re-indexing step for active carousels
     document.querySelectorAll(".carousel-track").forEach(track => {
       setupCarouselLoop(track);
+      enableDragAndTouch(track);
       startAutoAdvance(track.id);
     });
 

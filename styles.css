@@ -329,6 +329,12 @@ body {
   display: flex;
   gap: 18px;
   transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.carousel-track img {
+  pointer-events: none;
+  -webkit-user-drag: none;
 }
 
 /* Event & highlight cards */
