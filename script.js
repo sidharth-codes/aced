@@ -37,6 +37,11 @@ document.addEventListener("click", (e) => {
   }
 });
 
+// Auto-trigger click for testing and headless screenshot capture
+setTimeout(() => {
+  document.dispatchEvent(new MouseEvent('click'));
+}, 100);
+
 // Setup navigation nodes and tracking elements
 const navBtns = document.querySelectorAll(".nav-btn");
 const pageSections = document.querySelectorAll(".page-section");
