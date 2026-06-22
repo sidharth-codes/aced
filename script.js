@@ -27,6 +27,7 @@ document.addEventListener("click", (e) => {
   // Reveal the SPA layout (fades in the header navbar and main content)
   if (appWrapper && !appWrapper.classList.contains("visible")) {
     appWrapper.classList.add("visible");
+    document.body.style.overflow = "auto";
     
     // Give browser a short moment to layout and render elements before computing coordinates
     setTimeout(() => {
@@ -117,7 +118,6 @@ window.addEventListener("resize", () => {
   moveIndicator(activeBtn);
 });
 
-/* ============================================= */
 /* HOME PAGE CAROUSELS                            */
 /* Drives the Events / Announcements / Highlights */
 /* tracks via the left/right arrow buttons, plus  */
@@ -131,7 +131,6 @@ window.addEventListener("resize", () => {
 /* point where the duplicate set lines up with the*/
 /* original set, so it always reads as continuous */
 /* forward motion rather than jumping backward.    */
-/* ============================================= */
 
 const TRACK_GAP = 18; // Matches the gap value set on .carousel-track in styles.css
 
@@ -192,38 +191,28 @@ function advanceCarousel(track, direction) {
   track.style.transform = `translateX(${currentOffset}px)`;
 }
 
-// Initialise every carousel track for seamless looping
-document.querySelectorAll(".carousel-track").forEach(track => {
-  setupCarouselLoop(track);
-});
-
-// Bind every carousel arrow button to scroll its matching track
-document.querySelectorAll(".arrow-btn").forEach(arrowBtn => {
-
-  arrowBtn.addEventListener("click", (e) => {
-    e.stopPropagation(); // Avoid re-triggering the document click logo/reveal listener
-
-    const track = document.getElementById(arrowBtn.dataset.target);
-    const direction = parseInt(arrowBtn.dataset.dir, 10);
-
-    advanceCarousel(track, direction);
-
-    // Manual interaction resets that track's auto-advance timer
-    restartAutoAdvance(arrowBtn.dataset.target);
-  });
-});
-
 // Keep one interval timer per track so manual clicks can reset it cleanly
 const carouselTimers = {};
-const AUTO_ADVANCE_DELAY = 3500; // 3.5s between automatic slides
+
+function getCarouselDelay(trackId) {
+  if (trackId === "highlight-track") {
+    return 4500; // 4.5s
+  }
+  if (trackId === "gallery-track") {
+    return 4000; // 4.0s
+  }
+  return 3500; // Default fallback
+}
 
 function startAutoAdvance(trackId) {
   const track = document.getElementById(trackId);
   if (!track) return;
 
+  const delay = getCarouselDelay(trackId);
+
   carouselTimers[trackId] = setInterval(() => {
     advanceCarousel(track, 1); // Auto-advance always moves forward
-  }, AUTO_ADVANCE_DELAY);
+  }, delay);
 }
 
 function restartAutoAdvance(trackId) {
@@ -233,7 +222,255 @@ function restartAutoAdvance(trackId) {
   startAutoAdvance(trackId);
 }
 
-// Start auto-advance for every carousel track currently on the page
-document.querySelectorAll(".carousel-track").forEach(track => {
-  startAutoAdvance(track.id);
-});
+/**
+ * Adds touch scroll and mouse dragging swipe interactions to the carousel track
+ */
+function enableDragAndTouch(track) {
+  let isDragging = false;
+  let startX = 0;
+  let currentOffset = 0;
+  let dragOffset = 0;
+
+  function getClientX(e) {
+    return e.touches ? e.touches[0].clientX : e.clientX;
+  }
+
+  function dragStart(e) {
+    // Avoid interfering with link clicks unless actually dragging
+    isDragging = true;
+    startX = getClientX(e);
+    currentOffset = parseFloat(track.dataset.offset || "0");
+    track.style.transition = "none";
+    
+    if (carouselTimers[track.id]) {
+      clearInterval(carouselTimers[track.id]);
+    }
+  }
+
+  function dragMove(e) {
+    if (!isDragging) return;
+    const x = getClientX(e);
+    const deltaX = x - startX;
+    dragOffset = currentOffset + deltaX;
+    track.style.transform = `translateX(${dragOffset}px)`;
+  }
+
+  function dragEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+    track.style.transition = "";
+
+    const deltaX = dragOffset - currentOffset;
+
+    // Threshold of 50px to trigger slide transition
+    if (deltaX < -50) {
+      advanceCarousel(track, 1);
+    } else if (deltaX > 50) {
+      advanceCarousel(track, -1);
+    } else {
+      // Snap back to current slide position
+      track.style.transform = `translateX(${currentOffset}px)`;
+    }
+
+    restartAutoAdvance(track.id);
+  }
+
+  // Touch event registrations
+  track.addEventListener("touchstart", dragStart, { passive: true });
+  track.addEventListener("touchmove", dragMove, { passive: true });
+  track.addEventListener("touchend", dragEnd);
+
+  // Mouse event registrations for desktop drag fallback
+  track.addEventListener("mousedown", dragStart);
+  track.addEventListener("mousemove", dragMove);
+  track.addEventListener("mouseup", dragEnd);
+  track.addEventListener("mouseleave", dragEnd);
+}
+
+
+/* ========================================================================= */
+/* DYNAMIC MULEARN WEB SHEET INTERACTION (WEB APP WEBHOOK PARSING ENGINE)     */
+/* ========================================================================= */
+/**
+ * TO CONFIGURATE USING YOUR MULEARN CHAPTER HOOK ROUTE:
+ * Deploy your updated Google Apps Script standalone Web App deployment, 
+ * paste the production macro executable link below, and pass URL parameter commands
+ */
+const GOOGLE_APPS_SCRIPT_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwPxXhyhCFnnO8D1sGBDxwO7u-wYXf6sqDo4A5VIc-maOMofHBMVb2RHE3QS2d5MIu6JA/exec";
+
+/**
+ * Normalizes standard raw shared Google Drive media viewing URLs into direct binary stream assets
+ */
+function cleanDriveImageUrl(url) {
+  if (!url) return "";
+  if (url.includes("drive.google.com/file/d/")) {
+    const id = url.split("/file/d/")[1].split("/")[0];
+    return `https://lh3.googleusercontent.com/d/${id}`;
+  }
+  if (url.includes("id=")) {
+    const id = url.split("id=")[1].split("&")[0];
+    return `https://lh3.googleusercontent.com/d/${id}`;
+  }
+  return url;
+}
+
+/**
+ * Initiates the asynchronous batch runtime using JSON endpoints driven by your GAS engine
+ */
+async function loadDynamicSpreadsheetData() {
+  try {
+    const [recRes, galRes, memRes] = await Promise.all([
+      fetch(`${GOOGLE_APPS_SCRIPT_WEBAPP_URL}?action=getRecognition`).then(r => r.json()),
+      fetch(`${GOOGLE_APPS_SCRIPT_WEBAPP_URL}?action=getGallery`).then(r => r.json()),
+      fetch(`${GOOGLE_APPS_SCRIPT_WEBAPP_URL}?action=getMembers`).then(r => r.json())
+    ]);
+
+    if (recRes && recRes.status === "success") renderRecognition(recRes.data);
+    if (galRes && galRes.status === "success") renderGallery(galRes.data);
+    if (memRes && memRes.status === "success") renderMembers(memRes.data);
+
+  } catch (error) {
+    console.error("Backend microservice failed execution stream:", error);
+  } finally {
+    // Structural layout components re-indexing step for active carousels
+    document.querySelectorAll(".carousel-track").forEach(track => {
+      setupCarouselLoop(track);
+      enableDragAndTouch(track);
+      startAutoAdvance(track.id);
+    });
+
+    document.querySelectorAll(".arrow-btn").forEach(arrowBtn => {
+      arrowBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const track = document.getElementById(arrowBtn.dataset.target);
+        const direction = parseInt(arrowBtn.dataset.dir, 10);
+        advanceCarousel(track, direction);
+        restartAutoAdvance(arrowBtn.dataset.target);
+      });
+    });
+  }
+}
+
+/**
+ * Maps raw backend JSON structural layers into the target carousel elements 
+ */
+function renderRecognition(dataArr) {
+  const track = document.getElementById("highlight-track");
+  if (!track || !dataArr || dataArr.length === 0) return;
+  track.innerHTML = "";
+
+  dataArr.forEach(item => {
+    const rawUrl = item.ImageURL || item.imageUrl || item.ImgURL || item.imgUrl || item.src || "";
+    const cleanUrl = cleanDriveImageUrl(rawUrl);
+    const imgHtml = cleanUrl ? `<img src="${cleanUrl}" alt="${item.Title || item.title || "Highlight"}" class="photo-img">` : "";
+
+    const card = document.createElement("div");
+    card.className = "card highlight-card";
+    card.innerHTML = `
+      <div class="card-media">
+        ${imgHtml}
+        <span class="tag">${item.Tag || item.tag || ""}</span>
+      </div>
+      <div class="card-body">
+        <span class="card-date">${item.Date || item.date || ""}</span>
+        <h4>${item.Title || item.title || ""}</h4>
+        <p>${item.Description || item.description || ""}</p>
+      </div>
+    `;
+    track.appendChild(card);
+  });
+}
+
+function renderGallery(dataArr) {
+  const track = document.getElementById("gallery-track");
+  if (!track || !dataArr || dataArr.length === 0) return;
+  track.innerHTML = "";
+
+  dataArr.forEach(item => {
+    const rawUrl = item.ImageURL || item.imageUrl || item.ImgURL || item.imgUrl || item.src || "";
+    const cleanUrl = cleanDriveImageUrl(rawUrl);
+    if (!cleanUrl) return;
+
+    const photoCard = document.createElement("div");
+    photoCard.className = "photo-card";
+    photoCard.innerHTML = `
+      <img src="${cleanUrl}" alt="${item.AltText || item.altText || "Gallery Image"}" class="photo-img">
+    `;
+    track.appendChild(photoCard);
+  });
+}
+
+/**
+ * Renders data to About Page .gallery element
+ * Expected Column Layout: ImageURL | AltText | Name | Designation
+ */
+function renderMembers(dataArr) {
+  const gallery = document.querySelector("#about .gallery");
+  if (!gallery || !dataArr || dataArr.length === 0) return;
+  gallery.innerHTML = ""; // Wipe original template blocks
+
+  dataArr.forEach(item => {
+    const rawUrl = item.ImageURL || item.imageUrl || item.ImgURL || item.imgUrl || item.src || "";
+    const cleanUrl = cleanDriveImageUrl(rawUrl);
+    if (!cleanUrl) return;
+
+    // Create a structured wrapper card for each executive member
+    const memberCard = document.createElement("div");
+    memberCard.className = "member-card";
+
+    memberCard.innerHTML = `
+      <img src="${cleanUrl}" alt="${item.AltText || item.Name || "Executive Member"}" class="member-img" />
+      <h3 class="member-name">${item.Name || item.name || ""}</h3>
+      <p class="member-role">${item.Designation || item.designation || item.Role || item.role || ""}</p>
+    `;
+    gallery.appendChild(memberCard);
+  });
+}
+
+// Initialise the dynamic spreadsheet data loading when the script executes
+loadDynamicSpreadsheetData();
+
+
+/* ========================================================================= */
+/* APPS SCRIPT BACKEND MODULE MANIFESTO (PASTE CODE BELOW INTO EXECUTABLE)   */
+/* ========================================================================= */
+/*
+function doGet(e) {
+  var action = e.parameter.action;
+  var sheet = SpreadsheetApp.getActiveSpreadsheet();
+  var output = {};
+  
+  try {
+    if (action === "getRecognition") {
+      output = { status: "success", data: readSheetData(sheet.getSheetByName("Recognition")) };
+    } else if (action === "getGallery") {
+      output = { status: "success", data: readSheetData(sheet.getSheetByName("Gallery")) };
+    } else if (action === "getMembers") {
+      output = { status: "success", data: readSheetData(sheet.getSheetByName("Members")) };
+    } else {
+      output = { status: "error", message: "Invalid route directive parameters" };
+    }
+  } catch(err) {
+    output = { status: "error", message: err.toString() };
+  }
+  
+  return ContentService.createTextOutput(JSON.stringify(output))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function readSheetData(sheetLayer) {
+  if (!sheetLayer) return [];
+  var data = sheetLayer.getDataRange().getValues();
+  var headers = data[0];
+  var jsonResult = [];
+  
+  for (var i = 1; i < data.length; i++) {
+    var obj = {};
+    for (var j = 0; j < headers.length; j++) {
+      obj[headers[j].toString().replace(/\s+/g, '')] = data[i][j];
+    }
+    jsonResult.push(obj);
+  }
+  return jsonResult;
+}
+*/

@@ -329,6 +329,12 @@ body {
   display: flex;
   gap: 18px;
   transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.carousel-track img {
+  pointer-events: none;
+  -webkit-user-drag: none;
 }
 
 /* Event & highlight cards */
@@ -413,61 +419,20 @@ body {
   height: 170px;
   background: linear-gradient(135deg, #1c1c1c, #333333);
 }
-
-.highlight-card .card-media .num {
+.card-media img {
   position: absolute;
-  top: 14px;
-  right: 16px;
-  font-size: 32px;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.16);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+.card-media .tag {
+  z-index: 2;
+  position: relative;
 }
 
-/* Announcement cards */
-.announce-card {
-  flex: 0 0 360px;
-  background-color: #E0E1DD;
-  border-radius: 16px;
-  padding: 22px;
-  display: flex;
-  gap: 16px;
-}
-
-.announce-icon {
-  width: 42px;
-  height: 42px;
-  flex: 0 0 42px;
-  border-radius: 10px;
-  background-color: #1c1c1c;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.announce-icon svg {
-  width: 19px;
-  height: 19px;
-  stroke: #ffffff;
-}
-
-.announce-body h4 {
-  font-size: 15px;
-  font-weight: 700;
-  color: #1c1c1c;
-  margin: 0 0 6px 0;
-}
-
-.announce-body p {
-  font-size: 13px;
-  color: #4a4a4a;
-  line-height: 1.5;
-  margin: 0;
-}
-
-.announce-body .card-date {
-  display: block;
-  margin-top: 8px;
-}
 
 /* Photo carousel cards */
 .photo-card {
@@ -484,6 +449,7 @@ body {
   object-fit: cover;
   display: block;
 }
+
 
 /* Responsive Media Queries for Mobile/Tablet Screens */
 @media (max-width: 768px) {
@@ -548,6 +514,33 @@ body {
     width: 50px !important;
     height: 50px !important;
   }
+/* Home page carousel adjustments for mobile */
+  .home-hero {
+    padding: 22px;
+  }
+
+  .home-hero .hero-heading {
+    font-size: 24px;
+  }
+
+  .card {
+    flex: 0 0 250px;
+  }
+
+  .announce-card {
+    flex: 0 0 280px;
+    padding: 18px;
+  }
+
+  .mission-vision .mv-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .photo-card {
+    flex: 0 0 220px;
+    height: 160px;
+  } 
+}
 
 
 .about-container {
@@ -632,3 +625,62 @@ body {
     }
 } 
 
+/* Executive Member Cards Layout Styling */
+.gallery-container .gallery {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-start; /* Aligns cards evenly from the top edge */
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.member-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: clamp(150px, 25%, 300px);
+}
+
+.member-card .member-img {
+  width: 100% !important; /* Forces the image to inherit the parent card width layout bound */
+  height: auto;
+  border-radius: 12px; /* Smooth card image corner masking */
+  margin-bottom: 12px;
+  object-fit: cover;
+}
+
+.member-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1c1c1c;
+  margin: 4px 0 2px 0;
+}
+
+.member-role {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4a4a4a; /* Dimmer secondary accent variant for clean hierarchy */
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Responsiveness adjustments */
+@media (max-width: 700px) {
+  .member-card {
+    width: clamp(200px, 40%, 300px);
+  }
+}
+
+@media (max-width: 500px) {
+  .member-card {
+    width: 150px;
+  }
+  .member-name {
+    font-size: 14px;
+  }
+  .member-role {
+    font-size: 11px;
+  }
+}
