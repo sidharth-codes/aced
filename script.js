@@ -27,7 +27,7 @@ document.addEventListener("click", (e) => {
   // Reveal the SPA layout (fades in the header navbar and main content)
   if (appWrapper && !appWrapper.classList.contains("visible")) {
     appWrapper.classList.add("visible");
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = "auto";
     
     // Give browser a short moment to layout and render elements before computing coordinates
     setTimeout(() => {
@@ -36,11 +36,6 @@ document.addEventListener("click", (e) => {
     }, 50);
   }
 });
-
-// Auto-trigger click for testing and headless screenshot capture
-setTimeout(() => {
-  document.dispatchEvent(new MouseEvent('click'));
-}, 100);
 
 // Setup navigation nodes and tracking elements
 const navBtns = document.querySelectorAll(".nav-btn");
