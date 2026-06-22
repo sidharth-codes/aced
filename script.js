@@ -27,6 +27,7 @@ document.addEventListener("click", (e) => {
   // Reveal the SPA layout (fades in the header navbar and main content)
   if (appWrapper && !appWrapper.classList.contains("visible")) {
     appWrapper.classList.add("visible");
+    document.body.style.overflow = "auto";
     
     // Give browser a short moment to layout and render elements before computing coordinates
     setTimeout(() => {
