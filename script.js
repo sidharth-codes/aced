@@ -296,6 +296,7 @@ const GOOGLE_APPS_SCRIPT_WEBAPP_URL = "https://script.google.com/macros/s/AKfycb
 function cleanDriveImageUrl(url) {
   if (!url) return "";
   
+
   let id = "";
   if (url.includes("drive.google.com/file/d/")) {
     id = url.split("/file/d/")[1].split("/")[0];
@@ -308,6 +309,12 @@ function cleanDriveImageUrl(url) {
     return `https://docs.google.com/uc?export=view&id=${id}`;
   }
   
+
+  // Use the thumbnail endpoint — works cross-origin without auth cookies
+  if (id) {
+    return `https://drive.google.com/thumbnail?id=${id}&sz=w1000`;
+  }
+
   return url;
 }
 
@@ -361,6 +368,7 @@ function renderRecognition(dataArr) {
     const cleanUrl = cleanDriveImageUrl(rawUrl);
     
     const imgHtml = cleanUrl ? `<img src="${encodeURI(cleanUrl)}" alt="${escapeHTML(item.Title || item.title || "Highlight")}" class="photo-img">` : "";
+    const imgHtml = cleanUrl ? `<img src="${encodeURI(cleanUrl)}" alt="${escapeHTML(item.Title || item.title || "Highlight")}" class="photo-img" referrerpolicy="no-referrer">` : "";
 
     const card = document.createElement("div");
     card.className = "card highlight-card";
@@ -393,6 +401,7 @@ function renderGallery(dataArr) {
     photoCard.className = "photo-card";
     photoCard.innerHTML = `
       <img src="${encodeURI(cleanUrl)}" alt="${escapeHTML(item.AltText || item.altText || "Gallery Image")}" class="photo-img">
+      <img src="${encodeURI(cleanUrl)}" alt="${escapeHTML(item.AltText || item.altText || "Gallery Image")}" class="photo-img" referrerpolicy="no-referrer">
     `;
     track.appendChild(photoCard);
   });
@@ -413,6 +422,7 @@ function renderMembers(dataArr) {
 
     memberCard.innerHTML = `
       <img src="${encodeURI(cleanUrl)}" alt="${escapeHTML(item.AltText || item.Name || "Executive Member")}" class="member-img" />
+      <img src="${encodeURI(cleanUrl)}" alt="${escapeHTML(item.AltText || item.Name || "Executive Member")}" class="member-img" referrerpolicy="no-referrer" />
       <h3 class="member-name">${escapeHTML(item.Name || item.name || "")}</h3>
       <p class="member-role">${escapeHTML(item.Designation || item.designation || item.Role || item.role || "")}</p>
     `;
@@ -443,4 +453,5 @@ document.querySelectorAll('#event .event-row .event-text-card').forEach(card => 
 });
 
 // Initialise the dynamic spreadsheet data loading when the script executes
+loadDynamicSpreadsheetData();
 loadDynamicSpreadsheetData();
