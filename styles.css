@@ -684,3 +684,246 @@ body {
     font-size: 11px;
   }
 }
+/* ============================================= */
+/* EVENTS PAGE SPECIFIC STYLES                   */
+/* ============================================= */
+
+/* Main list container for stacking multiple event entries */
+#event .events-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  width: 100%;
+  max-width: 900px; 
+  margin: 60px auto;
+}
+
+/* Base structural row wrapper */
+#event .event-row {
+  display: flex;
+  align-items: center; 
+  position: relative;
+  width: 100%;
+}
+
+/* Floating Image Frame — Fixed dimensions */
+#event .event-img-frame {
+  flex: 0 0 35%;      
+  min-width: 280px;   
+  height: 320px;      
+  border-radius: 16px;
+  overflow: hidden;
+  z-index: 2;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.100);
+}
+
+/* Core Image Component and Zoom Transition Engine */
+#event .event-img-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Smooth zoom trigger on image frame hover */
+#event .event-img-frame:hover img {
+  transform: scale(1.08);
+}
+
+/* Premium Glassmorphism Text Card Component */
+#event .event-text-card {
+  flex: 1; 
+  /* CHANGE CARD COLOR PROFILE HERE */
+  background-color: #E0E1DD; /* Card Fill (Adjust RGBA or Hex) */
+  border: 1px solid #E0E1DD;   /* Hairline edge accent color */
+  
+  backdrop-filter: blur(12px); 
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  z-index: 1;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  min-height: 240px;
+  display: flex;
+  flex-direction: column; 
+  justify-content: center; 
+  padding: 40px 40px 40px 75px; 
+}
+
+/* Alternating Modifier (Card Left / Image Right Layout) */
+#event .event-row.reverse-row .event-text-card {
+  padding: 40px 75px 40px 40px; 
+}
+
+/* Overlap Spacing Modifiers */
+#event .margin-right-neg { margin-right: -40px; } 
+#event .margin-left-neg { margin-left: -40px; }
+
+/* Premium Accent Pillar Pill Tag for Dates */
+#event .event-meta {
+  /* ADJUST ACCENT PILL COLORS HERE */
+  background-color: #1c1c1c;       /* Pill Background Color */
+  color: #ffffff !important;        /* Pill Text Color */
+  
+  padding: 5px 12px;
+  border-radius: 6px;
+  width: fit-content;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+
+#event .event-heading {
+  font-size: 26px;
+  font-weight: 700;
+  color: #111111;                   /* Main Title Heading Color */
+  margin: 0 0 10px 0;
+  letter-spacing: -0.02em;
+}
+
+#event .event-desc-text {
+  font-size: 14.5px;
+  color: #555555;                   /* Paragraph Body text color */
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+  max-width: 480px; 
+}
+
+/* ============================================= */
+/* CORE HIGH-END ANIMATED BUTTON INITIALIZATION  */
+/* ============================================= */
+#event .animated-button {
+  position: relative;
+  display: inline-flex;  
+  align-items: center;
+  justify-content: center;
+  width: fit-content;    
+  padding: 10px 24px;    
+  height: 40px;          
+  
+  /* ADJUST DEFAULT BUTTON COLORS HERE */
+  border: 1.5px solid #1c1c1c;      /* Outlined baseline edge color */
+  color: #1c1c1c;                   /* Default text string color */
+  background-color: transparent;
+  
+  border-radius: 30px;
+  font-size: 11px;       
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  overflow: hidden;
+  margin-top: 14px;
+  
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Vector Inline Arrow Configuration */
+#event .animated-button svg {
+  position: absolute;
+  width: 14px;          
+  height: 14px;
+  fill: #1c1c1c;                    /* Default inline SVG vector arrow color */
+  z-index: 2;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Arrow 1: Visible by default on the right hand side */
+#event .animated-button .arr-1 {
+  right: 18px;
+}
+
+/* Arrow 2: Hidden off-canvas to the left side */
+#event .animated-button .arr-2 {
+  left: -30%;
+}
+
+/* The Animated Filling Core Background Flash Circle */
+#event .animated-button .circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1px;
+  height: 1px;
+  
+  /* ADJUST FILL FLASH COLOR HERE */
+  background-color: #1c1c1c;        /* Color that slides out from center on hover */
+  
+  border-radius: 50%;
+  opacity: 0;
+  z-index: 1;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Text Element Label Wrapper */
+#event .animated-button .text {
+  position: relative;
+  z-index: 2;
+  transform: translateX(-6px); 
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ============================================= */
+/* INTERACTIVE BUTTON HOVER ACTIONS STATES       */
+/* ============================================= */
+
+#event .animated-button:hover {
+  /* ADJUST ACTIVE HOVER TEXT COLOR HERE */
+  color: #ffffff;                   /* Color of text when button is active */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+#event .animated-button:hover .arr-1 {
+  right: -30%;
+}
+
+#event .animated-button:hover .arr-2 {
+  left: 18px;
+}
+
+#event .animated-button:hover .text {
+  transform: translateX(8px);
+}
+
+/* ADJUST ACTIVE HOVER ARROW COLOR HERE */
+#event .animated-button:hover svg {
+  fill: #ffffff;                    /* Color of the arrow icon during hover state */
+}
+
+#event .animated-button:active {
+  transform: scale(0.97);
+}
+
+#event .animated-button:hover .circle {
+  width: 240px; 
+  height: 240px;
+  opacity: 1;
+}
+
+/* ============================================= */
+/* RESPONSIVE MOBILE STACKING RULES              */
+/* ============================================= */
+@media (max-width: 768px) {
+  #event .event-row {
+    flex-direction: column !important;
+    gap: 16px;
+  }
+  #event .event-row.reverse-row {
+    flex-direction: column-reverse !important;
+  }
+  #event .event-row > div {
+    flex: initial !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+  #event .event-text-card {
+    padding: 24px !important;
+    min-height: initial;
+    background-color: #ffffff; /* Fallback flat layout background color for mobile */
+  }
+}
