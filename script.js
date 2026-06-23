@@ -1,4 +1,50 @@
 /**
+ * Launch Animation Handler
+ * Supports both desktop clicks and mobile touch events.
+ */
+function startLogoAnimation() {
+  // Prevent running twice
+  if (box.classList.contains("shrunk")) return;
+
+  // Shrink the logo box and reposition it to top-left
+  box.style.left = "50px";
+  box.style.top = "50px";
+  box.style.width = "75px";
+  box.style.height = "75px";
+
+  // Match the inner logo image dimensions
+  logo.style.width = "75px";
+  logo.style.height = "75px";
+
+  // Enable responsive CSS state
+  box.classList.add("shrunk");
+
+  // Reveal SPA wrapper
+  if (appWrapper && !appWrapper.classList.contains("visible")) {
+    appWrapper.classList.add("visible");
+    document.body.style.overflow = "auto";
+
+    setTimeout(() => {
+      const activeBtn = document.querySelector(".nav-btn.active");
+      moveIndicator(activeBtn);
+    }, 50);
+  }
+}
+
+/**
+ * Desktop Support
+ */
+document.addEventListener("click", startLogoAnimation, {
+  once: true
+});
+
+/**
+ * Mobile Touch Support
+ */
+document.addEventListener("touchstart", startLogoAnimation, {
+  passive: true,
+  once: true
+});/**
  * Maps raw backend JSON structural layers into the target carousel elements
  * SECURITY-HARDENED VERSION
  */
