@@ -293,16 +293,25 @@ const GOOGLE_APPS_SCRIPT_WEBAPP_URL = "https://script.google.com/macros/s/AKfycb
  * Normalizes standard raw shared Google Drive media viewing URLs into direct binary stream assets
  * FIX: Enforced secure HTTPS endpoints and fixed broken bracket interpolation logic.
  */
+/**
+ * Normalizes standard raw shared Google Drive media viewing URLs into direct public binary stream assets
+ */
 function cleanDriveImageUrl(url) {
   if (!url) return "";
+  
+  let id = "";
+  
   if (url.includes("drive.google.com/file/d/")) {
-    const id = url.split("/file/d/")[1].split("/")[0];
-    return `https://googleusercontent.com/profile/picture/0${id}`;
+    id = url.split("/file/d/")[1].split("/")[0];
+  } else if (url.includes("id=")) {
+    id = url.split("id=")[1].split("&")[0];
   }
-  if (url.includes("id=")) {
-    const id = url.split("id=")[1].split("&")[0];
-    return `https://googleusercontent.com/profile/picture/0${id}`;
+  
+  // If an ID was successfully extracted, use the open public hosting endpoint
+  if (id) {
+    return `https://docs.google.com/uc?export=view&id=${id}`;
   }
+  
   return url;
 }
 
