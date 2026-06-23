@@ -426,7 +426,12 @@ function renderMembers(dataArr) {
     gallery.appendChild(memberCard);
   });
 }
-
+document.querySelectorAll('.fp').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.fp').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+  });
+});
 // Initialise the dynamic spreadsheet data loading when the script executes
 loadDynamicSpreadsheetData();
 
