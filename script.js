@@ -291,23 +291,19 @@ const GOOGLE_APPS_SCRIPT_WEBAPP_URL = "https://script.google.com/macros/s/AKfycb
 
 /**
  * Normalizes standard raw shared Google Drive media viewing URLs into direct binary stream assets
- * FIX: Enforced secure HTTPS endpoints and fixed broken bracket interpolation logic.
- */
-/**
- * Normalizes standard raw shared Google Drive media viewing URLs into direct public binary stream assets
+ * FIX: Replaced authentication-blocked endpoint with the public image export asset URL stream.
  */
 function cleanDriveImageUrl(url) {
   if (!url) return "";
   
   let id = "";
-  
   if (url.includes("drive.google.com/file/d/")) {
     id = url.split("/file/d/")[1].split("/")[0];
   } else if (url.includes("id=")) {
     id = url.split("id=")[1].split("&")[0];
   }
   
-  // If an ID was successfully extracted, use the open public hosting endpoint
+  // If a valid ID is extracted, stream the image through the open public export routing pathway
   if (id) {
     return `https://docs.google.com/uc?export=view&id=${id}`;
   }
@@ -364,7 +360,6 @@ function renderRecognition(dataArr) {
     const rawUrl = item.ImageURL || item.imageUrl || item.ImgURL || item.imgUrl || item.src || "";
     const cleanUrl = cleanDriveImageUrl(rawUrl);
     
-    // Attribute scrubbing via explicit URL matching constraints can be performed here if preferred
     const imgHtml = cleanUrl ? `<img src="${encodeURI(cleanUrl)}" alt="${escapeHTML(item.Title || item.title || "Highlight")}" class="photo-img">` : "";
 
     const card = document.createElement("div");
