@@ -478,4 +478,17 @@ function readSheetData(sheetLayer) {
   }
   return jsonResult;
 }
-*/
+/**
+ * Attaches smooth interactive elevation states strictly to the Events page text cards
+ */
+document.querySelectorAll('#event .event-row .event-text-card').forEach(card => {
+  card.addEventListener('mouseenter', () => {
+    card.style.transform = 'translateY(-6px)';
+    card.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.08)';
+  });
+  
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'none';
+    card.style.boxShadow = 'none';
+  });
+});
