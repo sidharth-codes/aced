@@ -21,9 +21,6 @@ function escapeHTML(str) {
 /**
  * Click Event Listener on Document:
  * Triggers on first click anywhere on the page.
- * 1. Shrinks and moves the brand logo circle to the top-left corner.
- * 2. Fades in the SPA wrapper containing the navigation and content pages.
- * 3. Initialises the sliding menu indicator position.
  */
 document.addEventListener("click", (e) => {
   if (!box || !logo) return;
@@ -62,9 +59,7 @@ const navbar = document.getElementById("navbar");
 
 /**
  * moveIndicator:
- * Computes offset boundaries of the target navigation button
- * and aligns the shared indicator background pill behind it.
- * @param {HTMLElement} btn - The targeted navigation menu button
+ * Aligns the shared indicator background pill behind the target menu button
  */
 function moveIndicator(btn) {
   if (!navIndicator || !btn) return;
@@ -76,14 +71,6 @@ function moveIndicator(btn) {
 
 // Bind click and hover interactions to all navbar buttons
 navBtns.forEach(btn => {
-  
-  /**
-   * Click event listener for buttons:
-   * 1. Stops propagation to prevent document click recalculations.
-   * 2. Sets active class highlights on navigation tabs.
-   * 3. Locks indicator anchor to the selected button.
-   * 4. Swaps out and displays the active page section with fade animations.
-   */
   btn.addEventListener("click", (e) => {
     e.stopPropagation(); // Avoid triggering the document click listener repeatedly
     
@@ -106,19 +93,11 @@ navBtns.forEach(btn => {
     });
   });
 
-  /**
-   * Mouseenter hover event listener:
-   * Moves the indicator pill to follow cursor hovering.
-   */
   btn.addEventListener("mouseenter", () => {
     moveIndicator(btn);
   });
 });
 
-/**
- * Mouseleave event listener on navbar:
- * Snaps the indicator pill back to the active page button when cursor exits the menu.
- */
 if (navbar) {
   navbar.addEventListener("mouseleave", () => {
     const activeBtn = document.querySelector(".nav-btn.active");
@@ -126,10 +105,6 @@ if (navbar) {
   });
 }
 
-/**
- * Resize event listener on window:
- * Recalculates offsets during browser resizing to keep layout elements aligned.
- */
 window.addEventListener("resize", () => {
   const activeBtn = document.querySelector(".nav-btn.active");
   moveIndicator(activeBtn);
@@ -137,23 +112,19 @@ window.addEventListener("resize", () => {
 
 
 /* HOME PAGE CAROUSELS                                             */
-/* Drives the Events / Announcements / Highlights                  */
-
 const TRACK_GAP = 18; // Matches the gap value set on .carousel-track in styles.css
 
 function setupCarouselLoop(track) {
   const originalCards = Array.from(track.children);
   if (originalCards.length === 0) return;
 
-  // Measure the width of the original content before duplicating
   let originalWidth = 0;
   originalCards.forEach((card, i) => {
     originalWidth += card.getBoundingClientRect().width;
     if (i < originalCards.length - 1) originalWidth += TRACK_GAP;
   });
-  originalWidth += TRACK_GAP; // gap between the last original card and the first clone
+  originalWidth += TRACK_GAP;
 
-  // Duplicate the cards so the track always has enough content to scroll
   originalCards.forEach(card => {
     const clone = card.cloneNode(true);
     clone.setAttribute("aria-hidden", "true");
@@ -163,7 +134,6 @@ function setupCarouselLoop(track) {
   track.dataset.offset = "0";
   track.dataset.loopWidth = originalWidth;
 
-  // Once a slide finishes animating, snap invisibly back into range if needed.
   track.addEventListener("transitionend", () => {
     let offset = parseFloat(track.dataset.offset || "0");
     const loopWidth = parseFloat(track.dataset.loopWidth || "0");
@@ -173,13 +143,12 @@ function setupCarouselLoop(track) {
       track.style.transition = "none";
       track.dataset.offset = wrapped;
       track.style.transform = `translateX(${wrapped}px)`;
-      void track.offsetWidth; // Force reflow so the transition-removal takes effect immediately
+      void track.offsetWidth; 
       track.style.transition = "";
     }
   });
 }
 
-// Shared helper: moves a given track by one "step" in the given direction.
 function advanceCarousel(track, direction) {
   if (!track) return;
 
@@ -195,7 +164,6 @@ function advanceCarousel(track, direction) {
   track.style.transform = `translateX(${currentOffset}px)`;
 }
 
-// Keep one interval timer per track so manual clicks can reset it cleanly
 const carouselTimers = {};
 
 function getCarouselDelay(trackId) {
@@ -222,9 +190,6 @@ function restartAutoAdvance(trackId) {
   startAutoAdvance(trackId);
 }
 
-/**
- * Adds touch scroll and mouse dragging swipe interactions to the carousel track
- */
 function enableDragAndTouch(track) {
   let isDragging = false;
   let startX = 0;
@@ -284,19 +249,18 @@ function enableDragAndTouch(track) {
 
 
 /* ========================================================================= */
-/* DYNAMIC MULEARN WEB SHEET INTERACTION (WEB APP WEBHOOK PARSING ENGINE)     */
+/* DYNAMIC MULEARN WEB SHEET INTERACTION                                     */
 /* ========================================================================= */
 
 const GOOGLE_APPS_SCRIPT_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwPxXhyhCFnnO8D1sGBDxwO7u-wYXf6sqDo4A5VIc-maOMofHBMVb2RHE3QS2d5MIu6JA/exec";
 
 /**
- * Normalizes standard raw shared Google Drive media viewing URLs into direct binary stream assets
- * FIX: Replaced authentication-blocked endpoint with the public image export asset URL stream.
+ * Normalizes standard raw shared Google Drive media URLs.
+ * NOTE: If the main asset path fails cross-origin, you can swap out the direct view URL for the thumbnail URL format.
  */
 function cleanDriveImageUrl(url) {
   if (!url) return "";
   
-
   let id = "";
   if (url.includes("drive.google.com/file/d/")) {
     id = url.split("/file/d/")[1].split("/")[0];
@@ -304,22 +268,16 @@ function cleanDriveImageUrl(url) {
     id = url.split("id=")[1].split("&")[0];
   }
   
-  // If a valid ID is extracted, stream the image through the open public export routing pathway
   if (id) {
     return `https://docs.google.com/uc?export=view&id=${id}`;
-  }
-  
-
-  // Use the thumbnail endpoint — works cross-origin without auth cookies
-  if (id) {
-    return `https://drive.google.com/thumbnail?id=${id}&sz=w1000`;
+    // Fallback alternative if needed: return `https://drive.google.com/thumbnail?id=${id}&sz=w1000`;
   }
 
   return url;
 }
 
 /**
- * Initiates the asynchronous batch runtime using JSON endpoints driven by your GAS engine
+ * Initiates the asynchronous batch runtime
  */
 async function loadDynamicSpreadsheetData() {
   try {
@@ -354,10 +312,6 @@ async function loadDynamicSpreadsheetData() {
   }
 }
 
-/**
- * Maps raw backend JSON structural layers into the target carousel elements 
- * FIX: Applied comprehensive escapeHTML scrubbing across all data fields
- */
 function renderRecognition(dataArr) {
   const track = document.getElementById("highlight-track");
   if (!track || !dataArr || dataArr.length === 0) return;
@@ -367,7 +321,6 @@ function renderRecognition(dataArr) {
     const rawUrl = item.ImageURL || item.imageUrl || item.ImgURL || item.imgUrl || item.src || "";
     const cleanUrl = cleanDriveImageUrl(rawUrl);
     
-    const imgHtml = cleanUrl ? `<img src="${encodeURI(cleanUrl)}" alt="${escapeHTML(item.Title || item.title || "Highlight")}" class="photo-img">` : "";
     const imgHtml = cleanUrl ? `<img src="${encodeURI(cleanUrl)}" alt="${escapeHTML(item.Title || item.title || "Highlight")}" class="photo-img" referrerpolicy="no-referrer">` : "";
 
     const card = document.createElement("div");
@@ -400,7 +353,6 @@ function renderGallery(dataArr) {
     const photoCard = document.createElement("div");
     photoCard.className = "photo-card";
     photoCard.innerHTML = `
-      <img src="${encodeURI(cleanUrl)}" alt="${escapeHTML(item.AltText || item.altText || "Gallery Image")}" class="photo-img">
       <img src="${encodeURI(cleanUrl)}" alt="${escapeHTML(item.AltText || item.altText || "Gallery Image")}" class="photo-img" referrerpolicy="no-referrer">
     `;
     track.appendChild(photoCard);
@@ -421,7 +373,6 @@ function renderMembers(dataArr) {
     memberCard.className = "member-card";
 
     memberCard.innerHTML = `
-      <img src="${encodeURI(cleanUrl)}" alt="${escapeHTML(item.AltText || item.Name || "Executive Member")}" class="member-img" />
       <img src="${encodeURI(cleanUrl)}" alt="${escapeHTML(item.AltText || item.Name || "Executive Member")}" class="member-img" referrerpolicy="no-referrer" />
       <h3 class="member-name">${escapeHTML(item.Name || item.name || "")}</h3>
       <p class="member-role">${escapeHTML(item.Designation || item.designation || item.Role || item.role || "")}</p>
@@ -437,9 +388,6 @@ document.querySelectorAll('.fp').forEach(btn => {
   });
 });
 
-/**
- * Attaches smooth interactive elevation states strictly to the Events page text cards
- */
 document.querySelectorAll('#event .event-row .event-text-card').forEach(card => {
   card.addEventListener('mouseenter', () => {
     card.style.transform = 'translateY(-6px)';
@@ -452,6 +400,5 @@ document.querySelectorAll('#event .event-row .event-text-card').forEach(card => 
   });
 });
 
-// Initialise the dynamic spreadsheet data loading when the script executes
-loadDynamicSpreadsheetData();
+// Run exactly once on script initialization
 loadDynamicSpreadsheetData();
