@@ -1285,6 +1285,7 @@ body {
         font-size: 15px;
     }
 }
+
 .app-header {
   position: fixed;
   top: 0;
@@ -1294,31 +1295,53 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 16px;
+  padding: 12px 16px;
   background-color: #e5e5e3;
   z-index: 100;
+  gap: 16px;
 }
 
-.app-header img, 
-.app-header .logo-container {
-  height: 45px;
-  width: auto;
+/* Ensure the logo container behaves correctly as a flex item and doesn't shrink */
+.app-header .logo-container,
+.app-header a:first-child {
+  display: flex;
+  align-items: center;
   flex-shrink: 0;
+  z-index: 101; 
 }
 
+/* Constrain the logo image height properly */
+.app-header img {
+  height: 40px;
+  width: auto;
+  display: block;
+}
+
+/* Navigation container gets the rest of the space, pushes links to the right */
 .app-header nav,
 .app-header .nav-links-container {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
+  justify-content: flex-end;
   gap: 12px;
+  flex-grow: 1;
+  overflow-x: auto; /* Adds smooth scrolling if screen is too narrow */
+  -webkit-overflow-scrolling: touch;
 }
 
+/* Individual link adjustments */
 .app-header nav a,
 .app-header .nav-links-container a {
   white-space: nowrap;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 13px;
 }
+
+/* Prevent layout breaking behind the header */
+body {
+  padding-top: 64px; 
+}
+
 
