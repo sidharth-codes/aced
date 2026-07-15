@@ -24,17 +24,16 @@ body {
   left: 50%;  
   transform: translate(-50%, -50%);
   transition: all 0.5s ease-in; /* Handles smooth motion during shrink & move */
-  z-index: 100; /* Stays above SPA content container */
+  z-index: 150; /* Base layout layer depth initialization */
 }
 
-/* Logo Image Container */
-.logo {
-  width: 250px;
-  height: 250px;
-  position: relative;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+/* Scoped setup forcing images inside the logo block to fit inside bounds properly */
+.logo_box img,
+.logo_box .logo {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
   transition: all 0.5s ease-in; /* Keeps image size locked with its wrapper */
 }
 
@@ -59,22 +58,22 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  height: 75px;
+  height: 70px;
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 24px;
-  box-sizing: border-box;
   background-color: #e5e5e3;
-  z-index: 100;
+  z-index: 200; /* Must sit higher than the logo box layer */
 }
-
 
 /* Navigation List Wrapper */
 .navbar {
   display: flex;
   gap: 12px;
   position: relative;
+  align-items: center;
 }
 
 /* Sliding Indicator Background Pill */
@@ -105,6 +104,7 @@ body {
   cursor: pointer;
   position: relative;
   color: #4a4a4a;
+  white-space: nowrap;
   transition: color 0.3s ease, transform 0.2s ease;
   z-index: 1; /* Sits above the sliding indicator pill */
 }
@@ -439,7 +439,6 @@ body {
   position: relative;
 }
 
-
 /* Photo carousel cards */
 .photo-card {
   flex: 0 0 280px;
@@ -455,99 +454,6 @@ body {
   object-fit: cover;
   display: block;
 }
-
-
-/* Responsive Media Queries for Mobile/Tablet Screens */
-@media (max-width: 768px) {
-  body {
-    overflow: hidden; /* Keep overflow hidden so it acts like a true app */
-  }
-  
-  /* Reposition header side-by-side with logo on mobile */
-  .app-header {
-    position: absolute;
-    top: 15px;
-    left: 75px; /* Clear space for the 50px logo + 10px margin */
-    right: 15px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    z-index: 50;
-  }
-
-  /* Make navbar horizontally scrollable to prevent wrapping on narrow screens */
-  .navbar {
-    width: 100%;
-    overflow-x: auto;
-    display: flex;
-    gap: 8px;
-    padding: 4px 0;
-    scrollbar-width: none; /* Hide standard scrollbar for clean UI on Firefox */
-  }
-
-  .navbar::-webkit-scrollbar {
-    display: none; /* Hide scrollbar for Safari/Chrome */
-  }
-
-  .nav-btn {
-    padding: 6px 14px;
-    font-size: 13px;
-    white-space: nowrap; /* Prevent button text wrapping */
-  }
-
-  /* Adjust content container to sit below header/logo, spanning full width to the bottom */
-  .content-container {
-    position: absolute;
-    top: 80px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 20px;
-    border-radius: 16px 16px 0 0; /* Rounded top corners only */
-  }
-
-  /* Clamp logo box offset in mobile top left view only after it is shrunk */
-  .logo_box.shrunk {
-    left: 40px !important;
-    top: 40px !important;
-    width: 50px !important;
-    height: 50px !important;
-    transform: translate(-50%, -50%) !important;
-  }
-
-  .logo_box.shrunk .logo {
-    width: 50px !important;
-    height: 50px !important;
-  }
-/* Home page carousel adjustments for mobile */
-  .home-hero {
-    padding: 22px;
-  }
-
-  .home-hero .hero-heading {
-    font-size: 24px;
-  }
-
-  .card {
-    flex: 0 0 250px;
-  }
-
-  .announce-card {
-    flex: 0 0 280px;
-    padding: 18px;
-  }
-
-  .mission-vision .mv-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .photo-card {
-    flex: 0 0 220px;
-    height: 160px;
-  } 
-}
-
 
 .about-container {
     display: flex;
@@ -575,7 +481,6 @@ body {
     justify-content: center;
     align-items: center;
     padding: 40px 50px;
-
 }
 
 .gallery-container .gallery {
@@ -587,7 +492,6 @@ body {
 
 .gallery-container .gallery img {
     width: clamp(150px, 25%, 300px);
-
 }
 
 @media (max-width:700px) {
@@ -604,7 +508,6 @@ body {
 
     .gallery-container .gallery img {
         width: clamp(200px, 25%, 300px);
-
     }
 }
 
@@ -690,6 +593,7 @@ body {
     font-size: 11px;
   }
 }
+
 /* ============================================= */
 /* EVENTS PAGE SPECIFIC STYLES                   */
 /* ============================================= */
@@ -911,30 +815,8 @@ body {
   opacity: 1;
 }
 
-/* ============================================= */
-/* RESPONSIVE MOBILE STACKING RULES              */
-/* ============================================= */
-@media (max-width: 768px) {
-  #event .event-row {
-    flex-direction: column !important;
-    gap: 16px;
-  }
-  #event .event-row.reverse-row {
-    flex-direction: column-reverse !important;
-  }
-  #event .event-row > div {
-    flex: initial !important;
-    width: 100% !important;
-    margin: 0 !important;
-  }
-  #event .event-text-card {
-    padding: 24px !important;
-    min-height: initial;
-    background-color: #ffffff; /* Fallback flat layout background color for mobile */
-  }
-}
 /* ========================================================================= */
-/* 1. CONTACT CORE LAYOUT & TITLE                                            */
+/* CONTACT CORE LAYOUT & TITLE                                            */
 /* ========================================================================= */
 .contact-page {
     width: 100%;
@@ -974,7 +856,7 @@ body {
 }
 
 /* ========================================================================= */
-/* 2. CONTACT ENTRIES / LIST                                                */
+/* CONTACT ENTRIES / LIST                                                */
 /* ========================================================================= */
 .contact-entry {
     margin-bottom: 30px;
@@ -1017,7 +899,7 @@ body {
 }
 
 /* ========================================================================= */
-/* 3. CONTACT BOXES GRID                                                     */
+/* CONTACT BOXES GRID                                                     */
 /* ========================================================================= */
 .contact-boxes {
     width: 90%;
@@ -1066,7 +948,7 @@ body {
 }
 
 /* ========================================================================= */
-/* 4. ADDRESS BOX                                                            */
+/* ADDRESS BOX                                                            */
 /* ========================================================================= */
 .address-box {
     width: 900px;
@@ -1094,7 +976,7 @@ body {
 }
 
 /* ========================================================================= */
-/* 5. QUERY SECTION / FORM                                                   */
+/* QUERY SECTION / FORM                                                   */
 /* ========================================================================= */
 .query-section {
     width: 100%;
@@ -1178,170 +1060,191 @@ body {
 }
 
 /* ========================================================================= */
-/* 6. SINGLE RESPONSIVE BREAKPOINT (TABLET & MOBILE)                         */
+/* CORRECTED SINGLE RESPONSIVE MEDIA QUERY BLOCK (max-width: 768px)          */
 /* ========================================================================= */
 @media (max-width: 768px) {
-    /* Header structures */
-    .app-header {
-        height: auto;
-        padding: 15px 10px;
-    }
-    
-    .navbar {
-        gap: 12px;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
+  body {
+    overflow: hidden; /* Keep overflow hidden so it acts like a true app */
+  }
 
-    .nav-btn {
-        font-size: 13px;
-    }
+  /* Structural adjustment to prevent content layout boxes from shifting behind elements */
+  .app-header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 65px !important;
+    padding: 0 16px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    z-index: 200 !important;
+    background-color: #e5e5e3 !important;
+  }
 
-    /* Titles */
-    .contact-title {
-        font-size: 36px;
-    }
+  /* Force the navigation layout containers to behave on a clean horizontal line */
+  .navbar {
+    width: auto !important;
+    max-width: calc(100% - 70px) !important;
+    overflow-x: auto !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    justify-content: flex-end !important;
+    gap: 6px !important;
+    padding: 4px 0 !important;
+    scrollbar-width: none !important; 
+    -webkit-overflow-scrolling: touch !important;
+  }
 
-    /* Cards */
-    .contact-card {
-        width: 98%;
-        padding: 25px 15px;
-    }
+  .navbar::-webkit-scrollbar {
+    display: none !important; 
+  }
 
-    .contact-link-full {
-        gap: 12px;
-    }
+  .nav-btn {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+    white-space: nowrap !important; 
+  }
 
-    .contact-link-full span {
-        font-size: 14px;
-        white-space: normal;
-        word-break: break-word;
-    }
+  /* Shrinked Logo placement tracking update layout rules */
+  .logo_box.shrunk {
+    position: fixed !important;
+    left: 16px !important;
+    top: 32px !important; /* Centered beautifully alignment matching the 65px header block height */
+    width: 45px !important;
+    height: 45px !important;
+    transform: translateY(-50%) !important;
+    z-index: 210 !important; /* Pushes element execution priority over top background grids */
+  }
 
-    .contact-icon {
-        width: 42px;
-        height: 42px;
-        min-width: 42px;
-    }
+  .logo_box.shrunk .logo {
+    width: 45px !important;
+    height: 45px !important;
+    top: 0 !important;
+    left: 0 !important;
+    transform: none !important;
+  }
 
-    .contact-icon i {
-        font-size: 17px;
-    }
+  /* Clean view content alignment adjustment context bounds mapping */
+  .content-container {
+    position: absolute !important;
+    top: 65px !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    padding: 20px !important;
+    border-radius: 16px 16px 0 0 !important; 
+    z-index: 10 !important;
+  }
 
-    /* Info Grids */
-    .contact-boxes {
-        gap: 15px;
-    }
+  /* Home page carousel adjustments for mobile */
+  .home-hero {
+    padding: 22px;
+  }
 
-    .info-box {
-        width: 160px;
-        min-height: 150px;
-    }
+  .home-hero .hero-heading {
+    font-size: 24px;
+  }
 
-    .info-icon {
-        font-size: 30px;
-    }
+  .card {
+    flex: 0 0 250px;
+  }
 
-    .info-box h3 {
-        font-size: 16px;
-    }
+  .announce-card {
+    flex: 0 0 280px;
+    padding: 18px;
+  }
 
-    .info-box p {
-        font-size: 12px;
-    }
+  .mission-vision .mv-grid {
+    grid-template-columns: 1fr;
+  }
 
-    /* Query Fields */
-    .query-section {
-        width: 92%;
-    }
+  .photo-card {
+    flex: 0 0 220px;
+    height: 160px;
+  } 
 
-    .query-header h2 {
-        font-size: 24px;
-    }
+  /* Structural stacking card fixes inside subpages views text areas layout grids */
+  #event .event-row {
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+  #event .event-row.reverse-row {
+    flex-direction: column-reverse !important;
+  }
+  #event .event-row > div {
+    flex: initial !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+  #event .event-text-card {
+    padding: 24px !important;
+    min-height: initial !important;
+    background-color: #ffffff !important; 
+  }
 
-    .query-header p {
-        font-size: 14px;
-    }
-
-    .query-form {
-        padding: 25px;
-    }
-
-    .query-form input,
-    .query-form textarea {
-        font-size: 14px;
-    }
-
-    /* Address Container */
-    .address-box {
-        padding: 18px;
-    }
-
-    .address-box h3 {
-        font-size: 20px;
-    }
-
-    .address-box p {
-        font-size: 15px;
-    }
+  /* Contact layouts normalization overrides fixes tracking mapping elements views structures */
+  .contact-title {
+    font-size: 36px !important;
+  }
+  .contact-card {
+    width: 98% !important;
+    padding: 25px 15px !important;
+  }
+  .contact-link-full span {
+    font-size: 14px !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+  .contact-icon {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+  }
+  .contact-icon i {
+    font-size: 17px !important;
+  }
+  .contact-boxes {
+    gap: 15px !important;
+  }
+  .info-box {
+    width: 160px !important;
+    min-height: 150px !important;
+  }
+  .info-icon {
+    font-size: 30px !important;
+  }
+  .info-box h3 {
+    font-size: 16px !important;
+  }
+  .info-box p {
+    font-size: 12px !important;
+  }
+  .query-section {
+    width: 92% !important;
+  }
+  .query-header h2 {
+    font-size: 24px !important;
+  }
+  .query-header p {
+    font-size: 14px !important;
+  }
+  .query-form {
+    padding: 25px !important;
+  }
+  .query-form input,
+  .query-form textarea {
+    font-size: 14px !important;
+  }
+  .address-box {
+    padding: 18px !important;
+  }
+  .address-box h3 {
+    font-size: 20px !important;
+  }
+  .address-box p {
+    font-size: 15px !important;
+  }
 }
-
-.app-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  background-color: #e5e5e3;
-  z-index: 100;
-  gap: 16px;
-}
-
-/* Ensure the logo container behaves correctly as a flex item and doesn't shrink */
-.app-header .logo-container,
-.app-header a:first-child {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-  z-index: 101; 
-}
-
-/* Constrain the logo image height properly */
-.app-header img {
-  height: 40px;
-  width: auto;
-  display: block;
-}
-
-/* Navigation container gets the rest of the space, pushes links to the right */
-.app-header nav,
-.app-header .nav-links-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-  flex-grow: 1;
-  overflow-x: auto; /* Adds smooth scrolling if screen is too narrow */
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Individual link adjustments */
-.app-header nav a,
-.app-header .nav-links-container a {
-  white-space: nowrap;
-  text-decoration: none;
-  font-size: 13px;
-}
-
-/* Prevent layout breaking behind the header */
-body {
-  padding-top: 64px; 
-}
-
-
+  
