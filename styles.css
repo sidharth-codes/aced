@@ -1285,3 +1285,40 @@ body {
         font-size: 15px;
     }
 }
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background-color: #e5e5e3;
+  z-index: 100;
+}
+
+.app-header img, 
+.app-header .logo-container {
+  height: 45px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.app-header nav,
+.app-header .nav-links-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-header nav a,
+.app-header .nav-links-container a {
+  white-space: nowrap;
+  text-decoration: none;
+  font-size: 14px;
+}
+
