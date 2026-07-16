@@ -1083,11 +1083,17 @@ body {
 /* ========================================================================= */
 /* LATEST NEWS / UPDATES (NP)                                               */
 /* ========================================================================= */
+#news {
+  padding: 30px 40px;
+}
+
 .np {
   background: #E0E1DD;
-  padding: 0 1.25rem 2.5rem;
+  border-radius: 18px;
+  padding: 32px;
   font-family: "Anta", sans-serif;
   color: #1C1C1C;
+  overflow: hidden;
 }
 
 .np-header {
@@ -1792,4 +1798,4 @@ body {
   .query-form textarea { padding: 14px 16px; font-size: 14px; }
   .query-form button   { font-size: 14px; height: 48px; }
   .query-header h2     { font-size: 20px; }
-}
+}
