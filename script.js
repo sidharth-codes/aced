@@ -260,7 +260,6 @@ function enableDragAndTouch(track) {
 /* ========================================================================= */
 
 const GOOGLE_APPS_SCRIPT_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzLUwDjipc6k8gm2-roI3NQ8goJTY4Lrv0mRtDDP1j1llG0H2FNlFvFlDv7rrlj5h7K/exec";
-
 /**
  * Normalizes standard raw shared Google Drive media URLs.
  * NOTE: If the main asset path fails cross-origin, you can swap out the direct view URL for the thumbnail URL format.
