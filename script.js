@@ -263,8 +263,7 @@ function cleanDriveImageUrl(url) {
   }
   
   if (id) {
-    return `https://docs.google.com/uc?export=view&id=${id}`;
-    // Fallback alternative if needed: return `https://drive.google.com/thumbnail?id=${id}&sz=w1000`;
+    return `https://drive.google.com/thumbnail?id=${id}&sz=w1000`;
   }
 
   return url;

@@ -150,7 +150,7 @@ body {
 /* Main Content Wrapper Card: Houses all SPA page divs (full screen width, starts from bottom, no scrollbar) */
 .content-container {
   position: absolute;
-  top: 130px;
+  top: 70px;
   left: 0;
   right: 0;
   bottom: 0;
