@@ -5,7 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="referrer" content="no-referrer" />
     <link rel="stylesheet" href="styles.css" />
-    <script src="script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script>
+window.addEventListener("DOMContentLoaded", () => {
+    emailjs.init({
+        publicKey: "I5QE8k-OU8xZEndEI"
+    });
+});
+</script>
+
+<script src="script.js" defer></script>
     <title>ACED</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -278,31 +288,41 @@
         </p>
     </div>
 
-    <form class="query-form">
+    <form class="query-form" id="queryForm">
 
-        <input
-            type="text"
-            placeholder="Full Name"
-            required
-        >
+    <input
+        type="text"
+        name="name"
+        placeholder="Full Name"
+        required
+    >
 
-        <input
-            type="email"
-            placeholder="Email Address"
-            required
-        >
+    <input
+        type="email"
+        name="email"
+        placeholder="Email Address"
+        required
+    >
 
-        <textarea
-            rows="5"
-            placeholder="Type your message here..."
-            required
-        ></textarea>
+    <input
+        type="text"
+        name="subject"
+        placeholder="Subject"
+        required
+    >
 
-        <button type="submit">
-            SEND MESSAGE
-        </button>
+    <textarea
+        name="message"
+        rows="5"
+        placeholder="Type your message here..."
+        required
+    ></textarea>
 
-    </form>
+    <button type="submit">
+        SEND MESSAGE
+    </button>
+
+</form>
 
 </div>
         </div>

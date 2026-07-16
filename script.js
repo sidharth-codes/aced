@@ -671,5 +671,47 @@ function renderEvents(events) {
         `;
     });
 }
+const queryForm = document.getElementById("queryForm");
+
+if (queryForm) {
+
+    queryForm.addEventListener("submit", function (e) {
+
+        e.preventDefault();
+
+        const submitButton = queryForm.querySelector("button");
+
+        submitButton.disabled = true;
+        submitButton.innerText = "Sending...";
+
+        emailjs.sendForm(
+    "service_ur0b805",
+    "template_mf68aay",
+    queryForm
+)
+        .then(() => {
+
+            alert("Your query has been sent successfully.");
+
+            queryForm.reset();
+
+        })
+        .catch((error) => {
+
+            console.error(error);
+
+            alert("Failed to send query. Please try again.");
+
+        })
+        .finally(() => {
+
+            submitButton.disabled = false;
+            submitButton.innerText = "Send Query";
+
+        });
+
+    });
+
+}
 // Run exactly once on script initialization
 loadDynamicSpreadsheetData();
