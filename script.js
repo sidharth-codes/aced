@@ -83,6 +83,12 @@ navBtns.forEach(btn => {
         section.classList.remove("active");
       }
     });
+
+    // Scroll the content container back to the top for the new section
+    const contentContainer = document.querySelector(".content-container");
+    if (contentContainer) {
+      contentContainer.scrollTop = 0;
+    }
   });
 
   btn.addEventListener("mouseenter", () => {
@@ -119,11 +125,18 @@ function setupCarouselLoop(track) {
   });
   originalWidth += TRACK_GAP;
 
-  originalCards.forEach(card => {
-    const clone = card.cloneNode(true);
-    clone.setAttribute("aria-hidden", "true");
-    track.appendChild(clone);
-  });
+  // Clone the full set enough times to fill at least 2× the viewport
+  // so infinite scrolling always looks seamless, even with 1 entry
+  const viewportWidth = track.parentElement ? track.parentElement.getBoundingClientRect().width : window.innerWidth;
+  const setsNeeded = Math.max(1, Math.ceil((viewportWidth * 2) / originalWidth));
+
+  for (let s = 0; s < setsNeeded; s++) {
+    originalCards.forEach(card => {
+      const clone = card.cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      track.appendChild(clone);
+    });
+  }
 
   track.dataset.offset = "0";
   track.dataset.loopWidth = originalWidth;
@@ -246,7 +259,7 @@ function enableDragAndTouch(track) {
 /* DYNAMIC MULEARN WEB SHEET INTERACTION                                     */
 /* ========================================================================= */
 
-const GOOGLE_APPS_SCRIPT_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwPxXhyhCFnnO8D1sGBDxwO7u-wYXf6sqDo4A5VIc-maOMofHBMVb2RHE3QS2d5MIu6JA/exec";
+const GOOGLE_APPS_SCRIPT_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwPxXhyhCFnnO8D1sGBDxwO7u-wYXf6sqDo4A5VIc-maOMofHBMVb2RHE3QS2d5MIu6JA/exec"
 
 /**
  * Normalizes standard raw shared Google Drive media URLs.
@@ -274,15 +287,19 @@ function cleanDriveImageUrl(url) {
  */
 async function loadDynamicSpreadsheetData() {
   try {
-    const [recRes, galRes, memRes] = await Promise.all([
-      fetch(`${GOOGLE_APPS_SCRIPT_WEBAPP_URL}?action=getRecognition`).then(r => r.json()),
-      fetch(`${GOOGLE_APPS_SCRIPT_WEBAPP_URL}?action=getGallery`).then(r => r.json()),
-      fetch(`${GOOGLE_APPS_SCRIPT_WEBAPP_URL}?action=getMembers`).then(r => r.json())
-    ]);
+    const [recRes, galRes, memRes, newsRes, eventRes] = await Promise.all([
+  fetch(`${GOOGLE_APPS_SCRIPT_WEBAPP_URL}?action=getRecognition`).then(r => r.json()),
+  fetch(`${GOOGLE_APPS_SCRIPT_WEBAPP_URL}?action=getGallery`).then(r => r.json()),
+  fetch(`${GOOGLE_APPS_SCRIPT_WEBAPP_URL}?action=getMembers`).then(r => r.json()),
+  fetch(`${GOOGLE_APPS_SCRIPT_WEBAPP_URL}?action=getNews`).then(r => r.json()),
+  fetch(`${GOOGLE_APPS_SCRIPT_WEBAPP_URL}?action=getEvents`).then(r => r.json())
+]);
 
     if (recRes && recRes.status === "success") renderRecognition(recRes.data);
     if (galRes && galRes.status === "success") renderGallery(galRes.data);
     if (memRes && memRes.status === "success") renderMembers(memRes.data);
+    if (newsRes && newsRes.status === "success") renderNews(newsRes.data);
+    if (eventRes && eventRes.status === "success") renderEvents(eventRes.data);
 
   } catch (error) {
     console.error("Backend microservice failed execution stream:", error);
@@ -374,12 +391,178 @@ function renderMembers(dataArr) {
   });
 }
 
-document.querySelectorAll('.fp').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.fp').forEach(b => b.classList.remove('on'));
-    btn.classList.add('on');
+/**
+ * Global store for all news data so filters can re-render per category
+ */
+let allNewsData = [];
+
+/**
+ * renderNews:
+ * Stores news data globally and triggers initial render.
+ * Expects columns: Title, Excerpt, Date, Tag, ImageURL, Link, Featured
+ */
+function renderNews(dataArr) {
+  if (!dataArr || dataArr.length === 0) return;
+  allNewsData = dataArr;
+
+  // Render the "All" view first
+  renderNewsForCategory("all");
+
+  // Wire up filter buttons
+  bindNewsFilters();
+}
+
+/**
+ * renderNewsForCategory:
+ * Renders the full news layout (featured + recent grid + earlier list)
+ * for a specific category. "all" shows everything.
+ */
+function renderNewsForCategory(category) {
+  const contentEl = document.querySelector("#news .news-content");
+  if (!contentEl) return;
+
+  // Filter data by category
+  let filtered;
+  if (category === "all") {
+    filtered = allNewsData;
+  } else {
+    filtered = allNewsData.filter(item => {
+      const tag = (item.Tag || item.tag || "").toLowerCase();
+      return tag === category;
+    });
+  }
+
+  // Clear existing content
+  contentEl.innerHTML = "";
+
+  if (filtered.length === 0) {
+    contentEl.innerHTML = `<p class="news-empty">No news in this category yet.</p>`;
+    return;
+  }
+
+  // Separate featured from the rest
+  const featuredIdx  = filtered.findIndex(item => (item.Featured || item.featured || "").toUpperCase() === "TRUE");
+  const featuredItem = featuredIdx !== -1 ? filtered[featuredIdx] : null;
+  const rest         = filtered.filter((_, i) => i !== featuredIdx);
+
+  // --- Feature card ---
+  if (featuredItem) {
+    const rawUrl  = featuredItem.ImageURL || featuredItem.imageUrl || featuredItem.ImgURL || "";
+    const imgUrl  = cleanDriveImageUrl(rawUrl);
+    const link    = featuredItem.Link || featuredItem.link || "";
+
+    const featDiv = document.createElement("div");
+    featDiv.className = "feat";
+    featDiv.innerHTML = `
+      <div class="feat-img">
+        ${imgUrl
+          ? `<img src="${encodeURI(imgUrl)}" alt="${escapeHTML(featuredItem.Title || "")}" class="feat-img-actual" referrerpolicy="no-referrer">`
+          : `<div class="feat-img-ph"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div>`
+        }
+      </div>
+      <div class="feat-body">
+        <span class="feat-tag">${escapeHTML(featuredItem.Tag || featuredItem.tag || "")}</span>
+        <span class="feat-date">${escapeHTML(featuredItem.Date || featuredItem.date || "")}</span>
+        <h2 class="feat-ttl">${escapeHTML(featuredItem.Title || featuredItem.title || "")}</h2>
+        <p class="feat-exc">${escapeHTML(featuredItem.Excerpt || featuredItem.excerpt || "")}</p>
+        ${link
+          ? `<a href="${encodeURI(link)}" target="_blank" rel="noopener" class="rbtn">Read more</a>`
+          : `<button class="rbtn" disabled>Coming soon</button>`
+        }
+      </div>
+    `;
+    contentEl.appendChild(featDiv);
+  }
+
+  // --- Recent grid (first 3 non-featured rows) ---
+  const recentItems = rest.slice(0, 3);
+  if (recentItems.length > 0) {
+    const recentLabel = document.createElement("div");
+    recentLabel.className = "slbl";
+    recentLabel.textContent = "Recent";
+    contentEl.appendChild(recentLabel);
+
+    const gridDiv = document.createElement("div");
+    gridDiv.className = "grid3";
+
+    recentItems.forEach(item => {
+      const rawUrl = item.ImageURL || item.imageUrl || item.ImgURL || "";
+      const imgUrl = cleanDriveImageUrl(rawUrl);
+      const link   = item.Link || item.link || "";
+      const tag    = item.Tag || item.tag || "";
+
+      const card = document.createElement("div");
+      card.className = "acard";
+      card.innerHTML = `
+        <div class="card-img">${imgUrl ? `<img src="${encodeURI(imgUrl)}" alt="${escapeHTML(item.Title || "")}" referrerpolicy="no-referrer">` : ""}</div>
+        <div class="cbody">
+          <span class="ctag">${escapeHTML(tag)}</span>
+          <span class="cdate">${escapeHTML(item.Date || item.date || "")}</span>
+          <h3 class="cttl">${escapeHTML(item.Title || item.title || "")}</h3>
+          <p class="cexc">${escapeHTML(item.Excerpt || item.excerpt || "")}</p>
+          ${link
+            ? `<a href="${encodeURI(link)}" target="_blank" rel="noopener" class="clnk">Read more</a>`
+            : `<button class="clnk" disabled>Coming soon</button>`
+          }
+        </div>
+      `;
+      gridDiv.appendChild(card);
+    });
+
+    contentEl.appendChild(gridDiv);
+  }
+
+  // --- Earlier this year list (remaining rows after the first 3) ---
+  const olderItems = rest.slice(3);
+  if (olderItems.length > 0) {
+    const earlierLabel = document.createElement("div");
+    earlierLabel.className = "slbl";
+    earlierLabel.textContent = "Earlier this year";
+    contentEl.appendChild(earlierLabel);
+
+    const nlistDiv = document.createElement("div");
+    nlistDiv.className = "nlist";
+
+    olderItems.forEach(item => {
+      const rawUrl = item.ImageURL || item.imageUrl || item.ImgURL || "";
+      const imgUrl = cleanDriveImageUrl(rawUrl);
+      const link   = item.Link || item.link || "";
+      const tag    = item.Tag || item.tag || "";
+
+      const row = document.createElement("div");
+      row.className = "nitem";
+      row.innerHTML = `
+        <div class="lthumb">${imgUrl ? `<img src="${encodeURI(imgUrl)}" alt="${escapeHTML(item.Title || "")}" referrerpolicy="no-referrer">` : ""}</div>
+        <div class="lbody">
+          <span class="ltag">${escapeHTML(tag)}</span>
+          <h4 class="lttl">${link ? `<a href="${encodeURI(link)}" target="_blank" rel="noopener">${escapeHTML(item.Title || "")}</a>` : escapeHTML(item.Title || "")}</h4>
+          <p class="lexc">${escapeHTML(item.Excerpt || item.excerpt || "")}</p>
+          <span class="ldate">${escapeHTML(item.Date || item.date || "")}</span>
+        </div>
+      `;
+      nlistDiv.appendChild(row);
+    });
+
+    contentEl.appendChild(nlistDiv);
+  }
+}
+
+/**
+ * bindNewsFilters:
+ * Attaches click handlers to filter pill buttons (.fp).
+ * Each category fully re-renders its own Featured / Recent / Earlier sections.
+ */
+function bindNewsFilters() {
+  document.querySelectorAll('.fp').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.fp').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+
+      const filter = btn.textContent.trim().toLowerCase();
+      renderNewsForCategory(filter);
+    });
   });
-});
+}
 
 document.querySelectorAll('#event .event-row .event-text-card').forEach(card => {
   card.addEventListener('mouseenter', () => {
@@ -392,6 +575,101 @@ document.querySelectorAll('#event .event-row .event-text-card').forEach(card => 
     card.style.boxShadow = 'none';
   });
 });
+function renderEvents(events) {
 
+    const container = document.getElementById("eventsContainer");
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    if (!events || events.length === 0) {
+        container.innerHTML = "<p>No upcoming events.</p>";
+        return;
+    }
+
+    events.forEach((event, index) => {
+
+        const reverse = index % 2 === 1;
+
+        const image = cleanDriveImageUrl(event.ImageURL || "");
+
+        container.innerHTML += `
+        <div class="event-row ${reverse ? "reverse-row" : ""}">
+
+            ${
+                reverse
+                ? `
+                <div class="event-text-card padding-right-large">
+                    <span class="event-meta">${escapeHTML(event.Date)}</span>
+
+                    <h3 class="event-heading">${escapeHTML(event.Title)}</h3>
+
+                    <p class="event-desc-text">
+                        ${escapeHTML(event.Description)}
+                    </p>
+
+                    <a href="${event.RegistrationLink}"
+                       target="_blank"
+                       class="animated-button">
+
+                        <svg viewBox="0 0 24 24" class="arr-2">
+                            <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"/>
+                        </svg>
+
+                        <span class="text">Register</span>
+
+                        <span class="circle"></span>
+
+                        <svg viewBox="0 0 24 24" class="arr-1">
+                            <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"/>
+                        </svg>
+
+                    </a>
+                </div>
+
+                <div class="event-img-frame margin-left-neg">
+                    <img src="${image}" alt="${escapeHTML(event.Title)}">
+                </div>
+                `
+                : `
+                <div class="event-img-frame margin-right-neg">
+                    <img src="${image}" alt="${escapeHTML(event.Title)}">
+                </div>
+
+                <div class="event-text-card padding-left-large">
+                    <span class="event-meta">${escapeHTML(event.Date)}</span>
+
+                    <h3 class="event-heading">${escapeHTML(event.Title)}</h3>
+
+                    <p class="event-desc-text">
+                        ${escapeHTML(event.Description)}
+                    </p>
+
+                    <a href="${event.RegistrationLink}"
+                       target="_blank"
+                       class="animated-button">
+
+                        <svg viewBox="0 0 24 24" class="arr-2">
+                            <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"/>
+                        </svg>
+
+                        <span class="text">Register</span>
+
+                        <span class="circle"></span>
+
+                        <svg viewBox="0 0 24 24" class="arr-1">
+                            <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"/>
+                        </svg>
+
+                    </a>
+                </div>
+                `
+            }
+
+        </div>
+        `;
+    });
+}
 // Run exactly once on script initialization
 loadDynamicSpreadsheetData();

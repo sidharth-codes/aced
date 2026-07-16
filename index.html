@@ -30,7 +30,7 @@
 
       <main class="content-container">
         <div id="home" class="page-section active">
-          <h1 class="page-title">Home</h1>
+         
 
           <section class="home-hero">
             <div class="eyebrow">Welcome</div>
@@ -151,93 +151,33 @@
                 <p class="page-desc" style="max-width: 600px; margin-bottom: 0;">Join our upcoming workshops, hackathons, and technical design streams. Reserve your spot before slots fill up.</p>
               </div>
             </section>
-          <div class="events-list-container">
-  
-              <div class="event-row">
-                <div class="event-img-frame margin-right-neg">
-                  <img src="images/photo%202.png" alt="Macau Tech Summit">
-                </div>
-                
-                <div class="event-text-card padding-left-large">
-                  <span class="event-meta">Nov 12-14, 2026</span>
-                  <h3 class="event-heading">Event</h3>
-                  <p class="event-desc-text">Event Details.</p>
-                  <button class="animated-button">
-                      <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                          d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
-                        ></path>
-                      </svg>
-                      <span class="text">Learn More</span>
-                      <span class="circle"></span>
-                      <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                          d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
-                        ></path>
-                      </svg>
-                    </button>
-                </div>
-              </div>
-
-              <div class="event-row reverse-row">
-                <div class="event-text-card padding-right-large">
-                  <span class="event-meta">Dec 05, 2026</span>
-                  <h3 class="event-heading">Event</h3>
-                  <p class="event-desc-text">Event Details.</p>
-                  <button class="animated-button">
-                      <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                          d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
-                        ></path>
-                      </svg>
-                      <span class="text">Learn More</span>
-                      <span class="circle"></span>
-                      <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                          d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
-                        ></path>
-                      </svg>
-                    </button>
-                </div>
-                
-                <div class="event-img-frame margin-left-neg">
-                  <img src="images/photo%202.png" alt="Algorithmic Flows">
-                </div>
-              </div>
-
-              <div class="event-row">
-                <div class="event-img-frame margin-right-neg">
-                  <img src="images/photo%202.png" alt="UI/UX Component Systems">
-                </div>
-                
-                <div class="event-text-card padding-left-large">
-                  <span class="event-meta">Jan 18, 2027</span>
-                  <h3 class="event-heading">Event</h3>
-                  <p class="event-desc-text">Event Details.</p>
-                    <button class="animated-button">
-                      <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                          d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
-                        ></path>
-                      </svg>
-                      <span class="text">Learn More</span>
-                      <span class="circle"></span>
-                      <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                          d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
-                        ></path>
-                      </svg>
-                    </button>
-
-                </div>
-              </div>
-
-            </div>  
+          <div class="events-list-container" id="eventsContainer">
+    <!-- Events will be loaded dynamically from Google Sheets -->
+</div> 
         </div>
 
         <div id="news" class="page-section">
-          <h1 class="page-title">News</h1>
-          <p class="page-desc">This is News page</p>
+          <div class="np">
+            <div class="np-header">
+              <div class="np-eyebrow">ACED · Department Updates</div>
+              <h1 class="np-title">Latest News</h1>
+              <p class="np-desc">Stay tuned. Updates will be available soon.</p>
+            </div>
+
+            <div class="filter-bar">
+              <span class="fl">Filter</span>
+              <button class="fp on">All</button>
+              <button class="fp">Announcements</button>
+              <button class="fp">Events</button>
+              <button class="fp">Achievements</button>
+              <button class="fp">Workshops</button>
+            </div>
+
+            <!-- All news content dynamically rendered by renderNews() in script.js -->
+            <div class="news-content">
+            </div>
+
+          </div>
         </div>
 
         <div id="about" class="page-section">
