@@ -259,7 +259,7 @@ function enableDragAndTouch(track) {
 /* DYNAMIC MULEARN WEB SHEET INTERACTION                                     */
 /* ========================================================================= */
 
-const GOOGLE_APPS_SCRIPT_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwvZSkFzkd_KOrfaz4rKIGhP_xCfqN37ZwaJskN-PHU7c_iH8aJFugrRI14tTJ_TJA/exec"
+const GOOGLE_APPS_SCRIPT_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzLUwDjipc6k8gm2-roI3NQ8goJTY4Lrv0mRtDDP1j1llG0H2FNlFvFlDv7rrlj5h7K/exec";
 
 /**
  * Normalizes standard raw shared Google Drive media URLs.
