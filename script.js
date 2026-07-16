@@ -21,21 +21,13 @@ function escapeHTML(str) {
 /**
  * Click Event Listener on Document:
  * Triggers on first click anywhere on the page.
+ * CSS .logo_box.shrunk handles positioning for ALL screen sizes.
+ * JS only needs to add the class — no inline style overrides needed.
  */
 document.addEventListener("click", (e) => {
   if (!box || !logo) return;
 
-  // Shrink the logo box and reposition it to top-left
-  box.style.left = 50 + "px";
-  box.style.top = 50 + "px";
-  box.style.width = 75 + "px";
-  box.style.height = 75 + "px";
-
-  // Match the inner logo image dimensions to the box size
-  logo.style.width = 75 + "px";
-  logo.style.height = 75 + "px";
-
-  // Add shrunk class to enable responsive styles via CSS
+  // Add shrunk class — CSS base rule + media queries handle the rest
   box.classList.add("shrunk");
 
   // Reveal the SPA layout (fades in the header navbar and main content)
@@ -106,8 +98,10 @@ if (navbar) {
 }
 
 window.addEventListener("resize", () => {
+  // Re-align the nav indicator pill on resize/orientation change
   const activeBtn = document.querySelector(".nav-btn.active");
   moveIndicator(activeBtn);
+  // Note: logo repositioning is fully handled by CSS .logo_box.shrunk rules
 });
 
 
